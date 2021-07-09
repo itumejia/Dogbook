@@ -90,8 +90,12 @@ This is a social network for dogs. In this app dogs owners will be able to creat
 
 
 ## Wireframes
-[Add picture of your hand sketched wireframes in this section]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+
+Tab Navigation
+<img src="github.com/itumejia/Tab Navigation.jpg" width=600>
+
+Flow Navigation
+<img src="github.com/itumejia/Flow Navigation.jpg" width=600>
 
 ### [BONUS] Digital Wireframes & Mockups
 
