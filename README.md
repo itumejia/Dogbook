@@ -30,6 +30,8 @@ This is a social network for dogs. In this app dogs owners will be able to creat
 3. See a timeline feed with posts of other dogs
 4. See a detail screen of a post when it is clicked.
 5. See a detail screen of a user (dog profile) when the username is clicked in a post  
+12. A map with _Dogs nearby_
+13. Pinch to scale a photo in timeline
 
 **Optional Nice-to-have Stories**
 
@@ -52,6 +54,7 @@ This is a social network for dogs. In this app dogs owners will be able to creat
 * Main feed
    * 3. See a timeline feed with posts of other dogs
    * 6. Like posts
+   * 13. Pinch to scale a photo in timeline
 * Profile Details 
    * 5. See a detail screen of a user (dog profile) when the username is clicked in a post
    * 8. Follow other accounts
@@ -60,6 +63,9 @@ This is a social network for dogs. In this app dogs owners will be able to creat
    * 6. Like posts
    * 7. Comment on posts
    * 11. Share posts to Facebook with SDK 
+* Map of Dogs Nearby
+   * 12. A map with _Dogs nearby_
+
 * Only followed users feed (Optional)
    * 9. Specific timeline feed only for followed accounts
 
@@ -71,6 +77,8 @@ This is a social network for dogs. In this app dogs owners will be able to creat
 
 * Main feed
 * Only followed users feed (Optional)
+* Dogs Nearby Map
+* My profile
 
 **Flow Navigation** (Screen to Screen)
 
