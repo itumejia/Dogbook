@@ -106,12 +106,12 @@ This is a social network for dogs. In this app dogs owners will be able to creat
 Tab Navigation
 
 
-<img src="https://github.com/itumejia/Dogbook/blob/master/Tab%20Navigation.jpg" width=600>
+<img src="https://github.com/itumejia/Dogbook/blob/master/Mock%20Ups/Tab%20Navigation.jpg" width=600>
 
 Flow Navigation
 
 
-<img src="https://github.com/itumejia/Dogbook/blob/master/Flow%20navigation.jpg" width=600>
+<img src="https://github.com/itumejia/Dogbook/blob/master/Mock%20Ups/Flow%20navigation.jpg" width=600>
 
 
 ## Schema 
