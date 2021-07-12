@@ -43,6 +43,8 @@ This is a social network for dogs. In this app dogs owners will be able to creat
 10. Login and registerusing Facebook SDK
 11. Share posts to Facebook with SDK 
 15. DMs functionality
+16. Improve horizontal orientation layout
+17. Infinite scrolling
 
 ### 2. Screen Archetypes
 
@@ -111,28 +113,23 @@ Flow Navigation
 
 <img src="https://github.com/itumejia/Dogbook/blob/master/Flow%20navigation.jpg" width=600>
 
-### [BONUS] Digital Wireframes & Mockups
-
-### [BONUS] Interactive Prototype
 
 ## Schema 
 
 ### Models
 
-Post, Comments, Users
+Post, Comments, Users, Likes, Follows
 
 
 Model: Posts
 
-| Property    | Type          | Required | Description                                         |
-| ----------- | ------------- | -------- | --------------------------------------------------- |
-| objectId    | String        | True     | ID of the object (default)                          |
-| author      | Pointer<User> | True     | Author of the post, pointer to a User object        |
-| description | String        | True     | Caption of the post                                 |
-| photo       | File          | False    | Image of the post                                   |
-| location    | ?             | False    | Location of the post                                |
-| comments    | Array         | True     | List of comments of the post (objectIds)            |
-| likedBy     | Array         | True     | List of people that have liked the post (objectIds) |
+| Property    | Type          | Required | Description                                  |
+| ----------- | ------------- | -------- | -------------------------------------------- |
+| objectId    | String        | True     | ID of the object (default)                   |
+| author      | Pointer<User> | True     | Author of the post, pointer to a User object |
+| description | String        | True     | Caption of the post                          |
+| photo       | File          | False    | Image of the post                            |
+| location    | ?             | False    | Location of the post                         |
 
 Model: User
 | Property            | Type    | Required | Description                                  |
@@ -145,33 +142,201 @@ Model: User
 | birthday            | Date    | True     | Birthday of the dog (to get age)             |
 | lookingForPlaymates | Boolean | True     | Is the user looking for playmates?           |
 | ownerContact        | String  | False    | Contact information of the owner             |
-| likedPosts          | Array   | True     | List of posts liked by the user (objectIds)  |
-| following           | Array   | True     | List of followed users (objectIds)           |
-| followedBy          | Array   | True     | List of users following the user (objectIds) |
 
 Model: Comment
-| Property | Type          | Required | Description                |
-| -------- | ------------- | -------- | -------------------------- |
-| objectId | String        | True     | ID of the object (default) |
-| author   | Pointer<User> | True     | Author of the comment      |
-| content  | String        | True     | Content of the comment     |
+| Property | Type          | Required | Description                              |
+| -------- | ------------- | -------- | ---------------------------------------- |
+| objectId | String        | True     | ID of the object (default)               |
+| post     | Pointer<Post> | True     | ID of the post where the comment belongs |
+| author   | Pointer<User> | True     | Author of the comment                    |
+| content  | String        | True     | Content of the comment                   |
 
+
+Model: Like
+| Property | Type          | Required | Description                           |
+| -------- | ------------- | -------- | ------------------------------------- |
+| objectId | String        | True     | ID of the object (default)            |
+| post     | Pointer<Post> | True     | ID of the post where the like belongs |
+| author   | Pointer<User> | True     | Author of the like                    |
+
+Model: Follow
+| Property      | Type          | Required | Description                           |
+| ------------- | ------------- | -------- | ------------------------------------- |
+| objectId      | String        | True     | ID of the object (default)            |
+| followedUser  | Pointer<User> | True     | This user is followed by followinUser |
+| followingUser | Pointer<User> | True     | This user follows followedUser        |
 
 ### Networking
 * Register Sceen
    * (Create/POST) Create new user
+```
+    ParseUser user = new ParseUser();
+    user.setUsername(username);
+    user.setPassword(password);
+    user.put("ownerName", ownerName);
+    user.put("breed", breed);
+    user.put("birthday", birthday);
+    user.put("lookingForPlaymates", lookingForPlaymates);
+    user.put("ownerContact", ownerContact);                                
+
+    user.signUpInBackground(new SignUpCallback() {
+        @Override
+        public void done(ParseException e) {
+            //Sign up succeeded
+            if (e == null){
+                //What goes next
+            }
+            //Sign up did NOT succeed
+            else {
+                //TODO: Show specific issues to user with different toasts
+                Toast.makeText(SignupActivity.this, "Signup was not possible", Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Issue with signup", e);
+            }
+        }
+    });
+```
 * Main feed
    * (Read/GET) Get all posts 
-   * (Read/GET) Get list of posts liked by the current user
+   ```
+    ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+    query.setLimit(20);
+    query.orderByDescending("createdAt");
+    query.include("user");
+    query.findInBackground(new FindCallback<Post>() {
+        @Override
+        public void done(List<Post> objects, ParseException e) {
+            //Found posts successfully
+            if (e == null){
+                //Display posts
+            } else {
+                Log.e(TAG, "Failed fething posts from Parse", e);
+            }
+        }
+    });
+   ```
+   * (Read/GET) Get list of posts id liked by the current user
+```
+ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+query.selectKeys(Arrays.asList("post"));
+query.whereEqualTo("author", ParseUser.getCurrentUser());
+query.findInBackground(new FindCallback<ParseObject>() {
+
+    @Override
+    public void done(List<ParseObject> posts, ParseException e) {
+
+        if (e == null) {
+            //Liked Posts in posts
+        }
+
+        else {
+            Toast.makeText(MainActivity.this, "query error: " + e, Toast.LENGTH_LONG).show();
+
+        }
+
+    }
+    });
+```
    * (Create/POST) Like a post
+  
+  ```
+ParseObject<Like> entity = new ParseObject(Like.class);
+
+entity.put("post", postId);
+entity.put("author", authorId)
+
+// Saves the new object.
+// Notice that the SaveCallback is totally optional!
+entity.saveInBackground(e -> {
+    if (e==null){
+        //Save was done
+    } else {
+        //Something went wrong
+        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+});
+  ```
    * (Delete) Dislike a post
+   ```
+    ParseQuery<Like> query = new ParseObject(Like.class);
+
+    query.getInBackground(likeId, (object, e) -> {
+        if (e == null) {
+            //Object was fetched
+            //Deletes the fetched ParseObject from the database
+            object.deleteInBackground(e2 -> {
+                if(e2==null){
+                    Toast.makeText(this, "Delete Successful", Toast.LENGTH_SHORT).show();
+                }else{
+                    //Something went wrong while deleting the Object
+                    Toast.makeText(this, "Error: "+e2.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            //Something went wrong
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    });
+   ```
 * Compose new post
     * (Create/POST) Compose new post
+    ```
+    Post post = new Post();
+    post.setDescription(description);
+    post.setUser(user);
+    post.setImage(new ParseFile(photoFile));
+    post.setLocation(location);
+    post.saveInBackground(new SaveCallback() {
+        @Override
+        public void done(ParseException e) {
+            if (e != null){
+                Toast.makeText(getContext(), "Unsuccess to upload the comment", Toast.LENGTH_SHORT).show();
+            } else {
+                //Post saved successfully
+            }
+        }
+    });
+    ```
 * Details Post Screen
     * (Read/GET) Get comments of the post 
-    * (Create/POST) Like a post
+    ```
+    ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+    query.whereEqualTo("post", postId);
+    query.findInBackground(new FindCallback<ParseObject>() {
+
+        @Override
+        public void done(List<ParseObject> comments, ParseException e) {
+
+            if (e == null) {
+                //Comments of posts in comments
+            }
+
+            else {
+                Toast.makeText(MainActivity.this, "query error: " + e, Toast.LENGTH_LONG).show();
+
+            }
+
+        }
+    });
+    ``` 
+   * (Create/POST) Like a post
    * (Delete) Dislike a post
    * (Create/POST) Compose new comment
+   ```
+    Comment comment = new Comment();
+    comment.setAuthor(ParseUser.getCurrentUser());
+    comment.setPost(postId);
+    comment.setContent(content;
+    comment.saveInBackground(new SaveCallback() {
+        @Override
+        public void done(ParseException e) {
+            if (e != null){
+                Toast.makeText(getContext(), "Unsuccess to upload comment", Toast.LENGTH_SHORT).show();
+            } else {
+                //Comment saved successfully
+            }
+        }
+    });
+   ```
 * Details Profile Screen
     * (Read/GET) Get posts where author == selected user
    * (Read/GET) Get list of posts liked by the current user
@@ -180,5 +345,3 @@ Model: Comment
 * Dogs nearby map
     * (Read/GET) Get all posts (maybe only the ones made 24 or less hours ago)
 
-
-- [Create basic snippets for each Parse network request]
