@@ -32,6 +32,7 @@ This is a social network for dogs. In this app dogs owners will be able to creat
 5. See a detail screen of a user (dog profile) when the username is clicked in a post  
 12. A map with _Dogs nearby_
 13. Pinch to scale a photo in timeline
+14. User can compose a new post
 
 **Optional Nice-to-have Stories**
 
@@ -41,6 +42,7 @@ This is a social network for dogs. In this app dogs owners will be able to creat
 9. Specific timeline feed only for followed accounts
 10. Login and registerusing Facebook SDK
 11. Share posts to Facebook with SDK 
+15. DMs functionality
 
 ### 2. Screen Archetypes
 
