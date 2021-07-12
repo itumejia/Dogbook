@@ -116,10 +116,69 @@ Flow Navigation
 ### [BONUS] Interactive Prototype
 
 ## Schema 
-[This section will be completed in Unit 9]
+
 ### Models
-[Add table of models]
+
+Post, Comments, Users
+
+
+Model: Posts
+
+| Property    | Type          | Required | Description                                         |
+| ----------- | ------------- | -------- | --------------------------------------------------- |
+| objectId    | String        | True     | ID of the object (default)                          |
+| author      | Pointer<User> | True     | Author of the post, pointer to a User object        |
+| description | String        | True     | Caption of the post                                 |
+| photo       | File          | False    | Image of the post                                   |
+| location    | ?             | False    | Location of the post                                |
+| comments    | Array         | True     | List of comments of the post (objectIds)            |
+| likedBy     | Array         | True     | List of people that have liked the post (objectIds) |
+
+Model: User
+| Property            | Type    | Required | Description                                  |
+| ------------------- | ------- | -------- | -------------------------------------------- |
+| objectId            | String  | True     | ID of the object (default)                   |
+| username            | String  | True     | Unique username of the user                  |
+| password            | String  | True     | Password to authenticate                     |
+| ownerName           | String  | True     | Name of the dog's owner                      |
+| breed               | String  | True     | Breed of the dog                             |
+| birthday            | Date    | True     | Birthday of the dog (to get age)             |
+| lookingForPlaymates | Boolean | True     | Is the user looking for playmates?           |
+| ownerContact        | String  | False    | Contact information of the owner             |
+| likedPosts          | Array   | True     | List of posts liked by the user (objectIds)  |
+| following           | Array   | True     | List of followed users (objectIds)           |
+| followedBy          | Array   | True     | List of users following the user (objectIds) |
+
+Model: Comment
+| Property | Type          | Required | Description                |
+| -------- | ------------- | -------- | -------------------------- |
+| objectId | String        | True     | ID of the object (default) |
+| author   | Pointer<User> | True     | Author of the comment      |
+| content  | String        | True     | Content of the comment     |
+
+
 ### Networking
-- [Add list of network requests by screen ]
+* Register Sceen
+   * (Create/POST) Create new user
+* Main feed
+   * (Read/GET) Get all posts 
+   * (Read/GET) Get list of posts liked by the current user
+   * (Create/POST) Like a post
+   * (Delete) Dislike a post
+* Compose new post
+    * (Create/POST) Compose new post
+* Details Post Screen
+    * (Read/GET) Get comments of the post 
+    * (Create/POST) Like a post
+   * (Delete) Dislike a post
+   * (Create/POST) Compose new comment
+* Details Profile Screen
+    * (Read/GET) Get posts where author == selected user
+   * (Read/GET) Get list of posts liked by the current user
+   * (Create/POST) Like a post
+   * (Delete) Dislike a post
+* Dogs nearby map
+    * (Read/GET) Get all posts (maybe only the ones made 24 or less hours ago)
+
+
 - [Create basic snippets for each Parse network request]
-- [OPTIONAL: List endpoints if using existing API such as Yelp]
