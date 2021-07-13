@@ -19,4 +19,5 @@
     <string name="ownerContact">Way to contact the owner (optional)</string>
     <string name="ownerContactHint">Email or phone</string>
     <string name="haveAccount">Do you have an account?</string>
+    <string name="log_out">Log Out</string>
 </resources>
