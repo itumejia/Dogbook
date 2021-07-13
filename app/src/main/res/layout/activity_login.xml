@@ -44,7 +44,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Log In"
+            android:text="@string/logIn"
             android:textSize="34sp"
             android:textStyle="bold" />
 
@@ -56,13 +56,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Username" />
+                android:text="@string/Username" />
 
             <EditText
                 android:id="@+id/etUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter your username"
+                android:hint="@string/loginUsernameHint"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -75,13 +75,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Password" />
+                android:text="@string/Password" />
 
             <EditText
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter your password"
+                android:hint="@string/loginPasswordHint"
                 android:textSize="16sp"
                 android:inputType="textPassword"/>
 
@@ -92,7 +92,7 @@
             android:layout_marginTop="40dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Log In"
+            android:text="@string/logIn"
             android:backgroundTint="@color/main_color"
             android:textColor="@color/black"/>
 
@@ -104,7 +104,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New User?"/>
+                android:text="@string/newUser"/>
 
             <Button
                 android:id="@+id/btnSignup"
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:backgroundTint="@color/main_color"
-                android:text="Sign Up"
+                android:text="@string/signUp"
                 android:textColor="@color/black"
                 android:textSize="11sp" />
 
