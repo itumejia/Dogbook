@@ -31,6 +31,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Persistent log in
+        if(ParseUser.getCurrentUser() != null) {
+            goMainActivity();
+        }
+
         initView();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
