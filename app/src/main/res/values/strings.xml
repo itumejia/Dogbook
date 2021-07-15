@@ -20,4 +20,6 @@
     <string name="ownerContactHint">Email or phone</string>
     <string name="haveAccount">Do you have an account?</string>
     <string name="log_out">Log Out</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
