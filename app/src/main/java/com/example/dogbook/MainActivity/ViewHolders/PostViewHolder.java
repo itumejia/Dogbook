@@ -45,6 +45,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         ParseFile postPicture = post.getPhoto();
         if (postPicture != null) {
+            ivPostPicture.setVisibility(View.VISIBLE);
             Glide.with(context).load(postPicture.getUrl()).into(ivPostPicture);
         }
     }
@@ -54,6 +55,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         tvUsername.setText("");
         tvOwner.setText("");
         tvCaption.setText("");
+        ivPostPicture.setVisibility(View.GONE);
         ivPostPicture.setImageResource(0);
     }
 }

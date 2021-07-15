@@ -40,4 +40,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostViewHolder> {
     public int getItemCount() {
         return posts.size();
     }
+
+    @Override
+    public void onViewRecycled(@NonNull PostViewHolder holder) {
+        super.onViewRecycled(holder);
+        holder.recycle();
+    }
 }
