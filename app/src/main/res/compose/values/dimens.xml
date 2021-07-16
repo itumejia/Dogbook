@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="compose_title_text_size">24sp</dimen>
+    <dimen name="post_button_end_margin">15dp</dimen>
+    <dimen name="tab_layout_elevation">1dp</dimen>
+    <dimen name="preview_top_margin">20dp</dimen>
+    <dimen name="preview_username_separation">30dp</dimen>
+    <dimen name="location_icon_legend_separation">10dp</dimen>
+    <dimen name="location_image_separation">15dp</dimen>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dimensions_app_icon">40dp</dimen>
+    <dimen name="icon_title_separation">40dp</dimen>
+    <dimen name="layout_top_margin">40dp</dimen>
+    <dimen name="title_text_size">24sp</dimen>
+    <dimen name="title_screen_text_size">34sp</dimen>
+    <dimen name="margin_top_username">40dp</dimen>
+    <dimen name="input_box_width">250dp</dimen>
+    <dimen name="edit_text_size">16sp</dimen>
+    <dimen name="login_signup_separation">25dp</dimen>
+    <dimen name="legend_button_separation">10dp</dimen>
+    <dimen name="alternative_button_text_size">11sp</dimen>
+    <dimen name="legend_checkbox_separation">20dp</dimen>
+</resources>

@@ -16,9 +16,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
             android:text="@string/create_new_post"
-            android:textSize="24sp"
+            android:textSize="@dimen/compose_title_text_size"
             android:textStyle="bold" />
 
         <RelativeLayout
@@ -30,7 +29,7 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
+                android:layout_marginEnd="@dimen/post_button_end_margin"
                 android:color="@android:color/transparent"
                 android:text="@string/post"
                 android:layout_alignParentEnd="true"/>
@@ -44,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:translationZ="1dp"
+        android:translationZ="@dimen/tab_layout_elevation"
         app:tabIconTint="@color/black"
         app:tabIndicatorColor="@color/white"
         app:tabIndicatorGravity="top">
@@ -68,10 +67,10 @@
     <ImageView
         android:id="@+id/ivProfilePicture"
         android:layout_below="@id/toolbar"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="@dimen/profile_picture_dimensions"
+        android:layout_height="@dimen/profile_picture_dimensions"
+        android:layout_marginStart="@dimen/item_horizontal_margin"
+        android:layout_marginTop="@dimen/preview_top_margin"
         app:srcCompat="@drawable/dog_icon" />
 
     <TextView
@@ -79,11 +78,11 @@
         android:layout_below="@id/toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginStart="@dimen/profile_picture_username_separation"
+        android:layout_marginTop="@dimen/preview_username_separation"
         android:layout_toEndOf="@+id/ivProfilePicture"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="@dimen/username_text_size"
         android:textStyle="bold"
         tools:text="Cookie" />
 
@@ -92,8 +91,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="@dimen/profile_picture_username_separation"
+        android:layout_marginTop="@dimen/username_owner_separation"
         android:layout_toEndOf="@+id/ivProfilePicture"
         tools:text="from Sofia Mena" />
 
@@ -102,8 +101,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ivProfilePicture"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="20dp"
+        android:layout_marginHorizontal="@dimen/item_horizontal_margin"
+        android:layout_marginVertical="@dimen/profile_info_caption_separation"
         android:hint="@string/what_was_today_s_adventure"
         android:inputType="textMultiLine"
         android:lines="3" />
@@ -113,7 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/etCaption"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="@dimen/item_horizontal_margin"
         android:visibility="gone"
         app:srcCompat="@drawable/ic_baseline_add_location_24"
         app:tint="@color/black" />
@@ -124,7 +123,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/etCaption"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="@dimen/location_icon_legend_separation"
         android:layout_toEndOf="@id/ivLocationIcon"
         android:text="@string/current_location_added_to_the_post"
         android:textAlignment="viewStart"
@@ -135,8 +134,8 @@
     <ImageView
         android:id="@+id/ivPostPicture"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="@dimen/post_picture_size"
+        android:layout_marginTop="@dimen/location_image_separation"
         android:layout_below="@id/tvLocationIndicator"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 

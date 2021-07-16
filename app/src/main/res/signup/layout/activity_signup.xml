@@ -16,17 +16,17 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/dimensions_app_icon"
+            android:layout_height="@dimen/dimensions_app_icon"
             app:srcCompat="@drawable/dog"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="@dimen/layout_top_margin"
             android:text="@string/appName"
-            android:textSize="24sp"
+            android:textSize="@dimen/title_text_size"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
@@ -48,14 +48,14 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/layout_top_margin"
             android:text="@string/signUp"
-            android:textSize="34sp"
+            android:textSize="@dimen/title_screen_text_size"
             android:textStyle="bold" />
 
         <LinearLayout
-            android:layout_marginTop="40dp"
-            android:layout_width="250dp"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_width="@dimen/input_box_width"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
@@ -68,13 +68,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/usernameHint"
-                android:textSize="16sp" />
+                android:textSize="@dimen/edit_text_size" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="40dp"
-            android:layout_width="250dp"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_width="@dimen/input_box_width"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
@@ -87,14 +87,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/passwordHint"
-                android:textSize="16sp"
+                android:textSize="@dimen/edit_text_size"
                 android:inputType="textPassword"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="40dp"
-            android:layout_width="250dp"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_width="@dimen/input_box_width"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
@@ -107,14 +107,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/confirmPasswordHint"
-                android:textSize="16sp"
+                android:textSize="@dimen/edit_text_size"
                 android:inputType="textPassword"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="40dp"
-            android:layout_width="250dp"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_width="@dimen/input_box_width"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
@@ -127,12 +127,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/breedHint"
-                android:textSize="16sp" />
+                android:textSize="@dimen/edit_text_size" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/layout_top_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -151,7 +151,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/layout_top_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -162,15 +162,15 @@
 
             <CheckBox
                 android:id="@+id/cbLookingForPlaymates"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="@dimen/legend_checkbox_separation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="40dp"
-            android:layout_width="250dp"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_width="@dimen/input_box_width"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
@@ -183,13 +183,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/ownerNameHint"
-                android:textSize="16sp" />
+                android:textSize="@dimen/edit_text_size" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="40dp"
-            android:layout_width="250dp"
+            android:layout_marginTop="@dimen/layout_top_margin"
+            android:layout_width="@dimen/input_box_width"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
@@ -202,13 +202,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/ownerContactHint"
-                android:textSize="16sp" />
+                android:textSize="@dimen/edit_text_size" />
 
         </LinearLayout>
 
         <Button
             android:id="@+id/btnSignup"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/layout_top_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/signUp"
@@ -218,7 +218,7 @@
 
 
         <LinearLayout
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="@dimen/login_signup_separation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -231,11 +231,11 @@
                 android:id="@+id/btnLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="@dimen/legend_button_separation"
                 android:backgroundTint="@color/main_color"
                 android:text="@string/logIn"
                 android:textColor="@color/black"
-                android:textSize="11sp" />
+                android:textSize="@dimen/alternative_button_text_size" />
 
         </LinearLayout>
 

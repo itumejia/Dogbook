@@ -16,17 +16,17 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/dimensions_app_icon"
+            android:layout_height="@dimen/dimensions_app_icon"
             app:srcCompat="@drawable/dog"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="@dimen/icon_title_separation"
             android:text="@string/appName"
-            android:textSize="24sp"
+            android:textSize="@dimen/title_text_size"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
