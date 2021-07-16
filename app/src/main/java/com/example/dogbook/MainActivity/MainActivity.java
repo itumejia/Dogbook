@@ -1,6 +1,7 @@
 package com.example.dogbook.MainActivity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.dogbook.ComposeActivity.ComposeActivity;
 import com.example.dogbook.LoginActivity.LoginActivity;
 import com.example.dogbook.MainActivity.Fragments.TimelineFragment;
 import com.example.dogbook.R;
@@ -19,6 +21,7 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_COMPOSE_ACTIVITY = 2905;
     private Toolbar toolbar;
     private BottomNavigationView navigationBar;
     private FragmentManager fragmentManager = getSupportFragmentManager();
@@ -65,8 +68,19 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return true;
         }
+        if (item.getItemId() == R.id.menuCompose) {
+            Intent intent = new Intent(this, ComposeActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_COMPOSE_ACTIVITY);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_COMPOSE_ACTIVITY && resultCode == RESULT_OK && fragmentManager.findFragmentById(R.id.fragmentContainer) instanceof TimelineFragment) {
+            navigationBar.setSelectedItemId(R.id.item_home);
+        }
+    }
 }
