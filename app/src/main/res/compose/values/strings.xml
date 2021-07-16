@@ -1,0 +1,8 @@
+<resources>
+    <string name="create_new_post">Create new post</string>
+    <string name="post">Post</string>
+    <string name="take_a_photo">Take a photo</string>
+    <string name="add_current_location">Add current location</string>
+    <string name="what_was_today_s_adventure">What was today\'s adventure?</string>
+    <string name="current_location_added_to_the_post">Current location added to the post</string>
+</resources>

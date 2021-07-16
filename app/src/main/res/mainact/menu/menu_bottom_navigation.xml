@@ -5,16 +5,16 @@
     <item
         android:id="@+id/item_home"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="Home"
+        android:title="@string/home"
         app:showAsAction="always" />
     <item
         android:id="@+id/item_dogs_nearby"
         android:icon="@drawable/ic_baseline_map_24"
-        android:title="Dogs Nearby"
+        android:title="@string/dogs_nearby"
         app:showAsAction="always" />
     <item
         android:id="@+id/item_my_profile"
         android:icon="@drawable/ic_baseline_person_24"
-        android:title="My Profile"
+        android:title="@string/my_profile"
         app:showAsAction="always" />
 </menu>

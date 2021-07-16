@@ -5,7 +5,7 @@
     <item
         android:id="@+id/menuCompose"
         android:icon="@drawable/ic_baseline_camera_alt_24"
-        android:title="Compose"
+        android:title="@string/compose"
         app:showAsAction="always" />
     <item
         android:id="@+id/menuLogOut"

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Dogbook</string>
+    <string name="appName">Dogbook</string>
+    <string name="logIn">Log In</string>
+    <string name="Username">Username</string>
+    <string name="loginUsernameHint">Enter your username</string>
+    <string name="Password">Password</string>
+    <string name="loginPasswordHint">Enter your password</string>
+    <string name="newUser">New User?</string>
+</resources>
