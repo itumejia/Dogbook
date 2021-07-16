@@ -48,18 +48,22 @@ public class TimelineFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-
+        setUpRecyclerView();
     }
 
     private void initView(View view) {
         rvPosts = view.findViewById(R.id.rvPosts);
         posts = new ArrayList<>();
         postsAdapter = new PostsAdapter(getContext(), posts);
+    }
+
+    private void setUpRecyclerView() {
         rvPosts.setAdapter(postsAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(layoutManager);
         refreshPosts();
     }
+
 
     private void refreshPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
@@ -73,11 +77,10 @@ public class TimelineFragment extends Fragment {
                     posts.clear();
                     posts.addAll(objects);
                     postsAdapter.notifyDataSetChanged();
+                    return;
                 }
-                else {
-                    Log.e(TAG, "Issue finding posts in Parse", e);
-                    Toast.makeText(getContext(), "Unable to refresh posts", Toast.LENGTH_SHORT).show();
-                }
+                Log.e(TAG, "Issue finding posts in Parse", e);
+                Toast.makeText(getContext(), "Unable to refresh posts", Toast.LENGTH_SHORT).show();
             }
         });
     }
