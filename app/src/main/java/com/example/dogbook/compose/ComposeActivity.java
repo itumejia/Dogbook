@@ -1,7 +1,6 @@
-package com.example.dogbook.ComposeActivity;
+package com.example.dogbook.compose;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -29,9 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.dogbook.MainActivity.Models.Post;
+import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
-import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.parse.GetCallback;
 import com.parse.ParseException;

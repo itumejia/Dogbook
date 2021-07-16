@@ -1,4 +1,4 @@
-package com.example.dogbook.MainActivity.Adapters;
+package com.example.dogbook.main.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dogbook.MainActivity.Models.Post;
-import com.example.dogbook.MainActivity.ViewHolders.PostViewHolder;
+import com.example.dogbook.main.models.Post;
+import com.example.dogbook.main.viewholders.PostViewHolder;
 import com.example.dogbook.R;
 
 import java.util.List;

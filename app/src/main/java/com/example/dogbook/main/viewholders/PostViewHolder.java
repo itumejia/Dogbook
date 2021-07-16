@@ -1,4 +1,4 @@
-package com.example.dogbook.MainActivity.ViewHolders;
+package com.example.dogbook.main.viewholders;
 
 import android.content.Context;
 import android.view.View;
@@ -9,19 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.dogbook.MainActivity.Models.Post;
+import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
 import com.parse.ParseFile;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
 
-    ImageView ivProfilePicture;
-    ImageView ivPostPicture;
-    TextView tvUsername;
-    TextView tvOwner;
-    TextView tvCaption;
-    Context context;
+    private ImageView ivProfilePicture;
+    private ImageView ivPostPicture;
+    private TextView tvUsername;
+    private TextView tvOwner;
+    private TextView tvCaption;
+    private Context context;
 
     public PostViewHolder(@NonNull View itemView, Context context) {
         super(itemView);

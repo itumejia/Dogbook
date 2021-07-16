@@ -1,4 +1,4 @@
-package com.example.dogbook.SignupActivity;
+package com.example.dogbook.signup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,8 +13,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.dogbook.LoginActivity.LoginActivity;
-import com.example.dogbook.MainActivity.MainActivity;
+import com.example.dogbook.login.LoginActivity;
+import com.example.dogbook.main.MainActivity;
 import com.example.dogbook.R;
 import com.parse.ParseException;
 import com.parse.ParseUser;
