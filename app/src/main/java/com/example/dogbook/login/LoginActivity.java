@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         //Persistent log in
         if(ParseUser.getCurrentUser() != null) {
             goMainActivity();
+            return;
         }
 
         initView();
