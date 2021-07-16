@@ -60,17 +60,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menuLogOut) {
-            ParseUser.logOutInBackground();
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-            return true;
-        }
-        if (item.getItemId() == R.id.menuCompose) {
-            Intent intent = new Intent(this, ComposeActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_COMPOSE_ACTIVITY);
-            return true;
+        Intent intent;
+        switch (item.getItemId()) {
+            case (R.id.menuLogOut):
+                ParseUser.logOutInBackground();
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            case (R.id.menuCompose):
+                intent = new Intent(this, ComposeActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_COMPOSE_ACTIVITY);
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -78,8 +80,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_COMPOSE_ACTIVITY && resultCode == RESULT_OK && fragmentManager.findFragmentById(R.id.fragmentContainer) instanceof TimelineFragment) {
+        if (requestCode == REQUEST_CODE_COMPOSE_ACTIVITY && resultCode == RESULT_OK && isFragmentContainerATimelineFragment()) {
             navigationBar.setSelectedItemId(R.id.item_home);
         }
+    }
+
+    private boolean isFragmentContainerATimelineFragment(){
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragmentContainer);
+        if (fragment instanceof TimelineFragment) {
+            return true;
+        }
+        return false;
     }
 }

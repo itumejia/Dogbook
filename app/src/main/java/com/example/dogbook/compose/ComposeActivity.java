@@ -48,7 +48,7 @@ public class ComposeActivity extends AppCompatActivity implements LocationListen
     private static final String APP_TAG = "Dogbook";
     private static final String TAG = "ComposeActivity";
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 123;
-    private static final String photoFileName = "image.jpg";
+    private static final String PHOTO_FILE_NAME = "image.jpg";
 
     private File photoFile;
 
@@ -73,6 +73,35 @@ public class ComposeActivity extends AppCompatActivity implements LocationListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
         initView();
+        updateUserData();
+    }
+
+    private void initView() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        btnPost = findViewById(R.id.btnPost);
+        ivProfilePicture = findViewById(R.id.ivProfilePicture);
+        ivPostPicture = findViewById(R.id.ivPostPicture);
+        tvUsername = findViewById(R.id.tvUsername);
+        tvOwner = findViewById(R.id.tvOwner);
+        etCaption = findViewById(R.id.etCaption);
+        tabLayout = findViewById(R.id.tabLayout);
+        ivLocationIcon = findViewById(R.id.ivLocationIcon);
+        tvLocationIndicator = findViewById(R.id.tvLocationIndicator);
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                currentLocation = location;
+                locationManager.removeUpdates(this);
+                Log.d(TAG, "Latitude: " + currentLocation.getLatitude() + "Longitude: " + currentLocation.getLongitude());
+                ivLocationIcon.setVisibility(View.VISIBLE);
+                tvLocationIndicator.setVisibility(View.VISIBLE);
+            }
+        };
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -105,35 +134,6 @@ public class ComposeActivity extends AppCompatActivity implements LocationListen
                 uploadPost();
             }
         });
-    }
-
-    private void initView() {
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        btnPost = findViewById(R.id.btnPost);
-        ivProfilePicture = findViewById(R.id.ivProfilePicture);
-        ivPostPicture = findViewById(R.id.ivPostPicture);
-        tvUsername = findViewById(R.id.tvUsername);
-        tvOwner = findViewById(R.id.tvOwner);
-        etCaption = findViewById(R.id.etCaption);
-        tabLayout = findViewById(R.id.tabLayout);
-        updateUserData();
-        ivLocationIcon = findViewById(R.id.ivLocationIcon);
-        tvLocationIndicator = findViewById(R.id.tvLocationIndicator);
-
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                currentLocation = location;
-                locationManager.removeUpdates(this);
-                Log.d(TAG, "Latitude: " + currentLocation.getLatitude() + "Longitude: " + currentLocation.getLongitude());
-                ivLocationIcon.setVisibility(View.VISIBLE);
-                tvLocationIndicator.setVisibility(View.VISIBLE);
-            }
-        };
 
     }
 
@@ -216,7 +216,11 @@ public class ComposeActivity extends AppCompatActivity implements LocationListen
         //Intent to image capturing (camera)
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //Create file reference where the taken picture will be saved
-        photoFile = getPhotoFileUri(photoFileName);
+        photoFile = getPhotoFileUri(PHOTO_FILE_NAME);
+        if (photoFile == null) {
+            Toast.makeText(this, "Unable to set images directory", Toast.LENGTH_SHORT).show();
+            return;
+        }
         //Provider security measure
         Uri fileProvider = FileProvider.getUriForFile(this, "com.example.dogbook.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
@@ -229,6 +233,7 @@ public class ComposeActivity extends AppCompatActivity implements LocationListen
         //If directory does not exist, tries to make the directory, if fails, logs a message
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
             Log.e(TAG, "Failed to create app directory");
+            return null;
         }
         File file = new File(mediaStorageDir.getPath() + File.separator + photoFileName);
         return file;
