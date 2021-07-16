@@ -32,7 +32,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initView();
+    }
 
+    private void initView() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        navigationBar = findViewById(R.id.navigationBar);
         navigationBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -43,13 +49,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navigationBar.setSelectedItemId(R.id.item_home); //Display home when initialized
-    }
-
-    private void initView() {
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
-        navigationBar = findViewById(R.id.navigationBar);
 
     }
 

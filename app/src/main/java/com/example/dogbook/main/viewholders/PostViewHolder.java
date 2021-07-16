@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
+import com.example.dogbook.main.models.User;
 import com.parse.ParseFile;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
@@ -34,13 +35,13 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Post post) {
-        ParseFile profilePicture = post.getAuthor().getParseFile("profilePicture");
+        ParseFile profilePicture = post.getAuthor().getParseFile(User.KEY_PROFILE_PICTURE);
         if (profilePicture != null) {
             Glide.with(context).load(profilePicture.getUrl()).into(ivProfilePicture);
         }
 
         tvUsername.setText(post.getAuthor().getUsername());
-        tvOwner.setText(String.format("from %s", post.getAuthor().getString("ownerName")));
+        tvOwner.setText(String.format("from %s", post.getAuthor().getString(User.KEY_OWNER_NAME)));
         tvCaption.setText(post.getDescription());
 
         ParseFile postPicture = post.getPhoto();
