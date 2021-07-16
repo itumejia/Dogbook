@@ -1,4 +1,4 @@
-package com.example.dogbook.MainActivity.Fragments;
+package com.example.dogbook.main.fragments;
 
 import android.os.Bundle;
 
@@ -14,8 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.dogbook.MainActivity.Adapters.PostsAdapter;
-import com.example.dogbook.MainActivity.Models.Post;
+import com.example.dogbook.main.adapters.PostsAdapter;
+import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;

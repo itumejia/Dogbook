@@ -1,4 +1,4 @@
-package com.example.dogbook.LoginActivity;
+package com.example.dogbook.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.dogbook.MainActivity.MainActivity;
+import com.example.dogbook.main.MainActivity;
 import com.example.dogbook.R;
-import com.example.dogbook.SignupActivity.SignupActivity;
+import com.example.dogbook.signup.SignupActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
-                loginUser(username,password);
+                loginUser(username, password);
             }
         });
 

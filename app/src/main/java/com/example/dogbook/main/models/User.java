@@ -1,7 +1,6 @@
-package com.example.dogbook.MainActivity.Models;
+package com.example.dogbook.main.models;
 
 import com.parse.ParseClassName;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 @ParseClassName("User")

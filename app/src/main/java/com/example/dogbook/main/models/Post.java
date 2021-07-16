@@ -1,4 +1,4 @@
-package com.example.dogbook.MainActivity.Models;
+package com.example.dogbook.main.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;

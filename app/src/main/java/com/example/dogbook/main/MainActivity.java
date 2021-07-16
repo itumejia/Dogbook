@@ -1,4 +1,4 @@
-package com.example.dogbook.MainActivity;
+package com.example.dogbook.main;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,9 +12,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.dogbook.ComposeActivity.ComposeActivity;
-import com.example.dogbook.LoginActivity.LoginActivity;
-import com.example.dogbook.MainActivity.Fragments.TimelineFragment;
+import com.example.dogbook.compose.ComposeActivity;
+import com.example.dogbook.login.LoginActivity;
+import com.example.dogbook.main.fragments.TimelineFragment;
 import com.example.dogbook.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
