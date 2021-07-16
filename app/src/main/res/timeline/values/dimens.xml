@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="profile_picture_dimensions">70dp</dimen>
+    <dimen name="item_horizontal_margin">20dp</dimen>
+    <dimen name="item_top_margin">10dp</dimen>
+    <dimen name="profile_picture_username_separation">20dp</dimen>
+    <dimen name="username_top_margin">30dp</dimen>
+    <dimen name="username_text_size">20sp</dimen>
+    <dimen name="username_owner_separation">5dp</dimen>
+    <dimen name="profile_info_caption_separation">20dp</dimen>
+    <dimen name="caption_image_separation">20dp</dimen>
+    <dimen name="caption_text_size">16sp</dimen>
+    <dimen name="post_picture_size">300dp</dimen>
+    <dimen name="divider_vertical_margin">20dp</dimen>
+    <dimen name="divider_horizontal_margin">10dp</dimen>
+    <dimen name="divider_size">1dp</dimen>
+</resources>

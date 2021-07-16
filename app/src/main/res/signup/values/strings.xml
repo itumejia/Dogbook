@@ -1,13 +1,7 @@
 <resources>
-    <string name="app_name">Dogbook</string>
-    <string name="appName">Dogbook</string>
-    <string name="logIn">Log In</string>
-    <string name="Username">Username</string>
-    <string name="loginUsernameHint">Enter a username for your dog</string>
-    <string name="Password">Password</string>
-    <string name="loginPasswordHint">Enter your password</string>
-    <string name="newUser">New User?</string>
     <string name="signUp">Sign Up</string>
+    <string name="usernameHint">Enter a username for your dog</string>
+    <string name="passwordHint">Enter your password</string>
     <string name="confirmPassword">Confirm password</string>
     <string name="confirmPasswordHint">Confirm your password</string>
     <string name="ownerName">Owner\'s Name</string>
@@ -19,7 +13,4 @@
     <string name="ownerContact">Way to contact the owner (optional)</string>
     <string name="ownerContactHint">Email or phone</string>
     <string name="haveAccount">Do you have an account?</string>
-    <string name="log_out">Log Out</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

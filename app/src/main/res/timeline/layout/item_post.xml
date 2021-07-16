@@ -7,21 +7,21 @@
 
     <ImageView
         android:id="@+id/ivProfilePicture"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="@dimen/profile_picture_dimensions"
+        android:layout_height="@dimen/profile_picture_dimensions"
+        android:layout_marginStart="@dimen/item_horizontal_margin"
+        android:layout_marginTop="@dimen/item_top_margin"
         app:srcCompat="@drawable/dog_icon" />
 
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginStart="@dimen/profile_picture_username_separation"
+        android:layout_marginTop="@dimen/username_top_margin"
         android:layout_toEndOf="@+id/ivProfilePicture"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="@dimen/username_text_size"
         android:textStyle="bold"
         tools:text="Cookie" />
 
@@ -30,8 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="@dimen/profile_picture_username_separation"
+        android:layout_marginTop="@dimen/username_owner_separation"
         android:layout_toEndOf="@+id/ivProfilePicture"
         tools:text="from Sofia Mena" />
 
@@ -40,27 +40,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ivProfilePicture"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:textSize="16sp"
+        android:layout_marginStart="@dimen/item_horizontal_margin"
+        android:layout_marginTop="@dimen/profile_info_caption_separation"
+        android:layout_marginEnd="@dimen/item_horizontal_margin"
+        android:layout_marginBottom="@dimen/caption_image_separation"
+        android:textSize="@dimen/caption_text_size"
         tools:text="A beautiful day in the park..." />
 
     <ImageView
         android:id="@+id/ivPostPicture"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="@dimen/post_picture_size"
         android:layout_below="@id/tvCaption"
         android:visibility="gone"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <View
         android:id="@+id/divider"
-        android:layout_marginVertical="20dp"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="@dimen/divider_vertical_margin"
+        android:layout_marginHorizontal="@dimen/divider_horizontal_margin"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/divider_size"
         android:background="?android:attr/listDivider"
         android:layout_below="@id/ivPostPicture"/>
 

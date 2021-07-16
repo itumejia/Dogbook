@@ -1,0 +1,7 @@
+<resources>
+    <string name="log_out">Log Out</string>
+    <string name="compose">Compose</string>
+    <string name="home">Home</string>
+    <string name="dogs_nearby">Dogs Nearby</string>
+    <string name="my_profile">My Profile</string>
+</resources>

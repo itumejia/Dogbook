@@ -26,6 +26,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    sourceSets {
+        main {
+            res {
+                srcDirs 'src/main/res', 'src/main/res/signup', 'src/main/res/signup/layout', 'src/main/android_resources/login', 'src/main/res/login', 'src/main/res/mainact', 'src/main/res/compose', 'src/main/res/timeline'
+            }
+            resources {
+                srcDirs 'src/main/resources', 'src/main/resources/login'
+            }
+        }
+    }
 }
 
 ext {
