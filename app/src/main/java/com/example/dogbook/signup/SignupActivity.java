@@ -25,17 +25,18 @@ import java.util.Date;
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "SignupActivity";
+    public static final int YEAR_FIX = 1900;
 
-    EditText etUsername;
-    EditText etPassword;
-    EditText etConfirmPassword;
-    EditText etBreed;
-    DatePicker dpBirthday;
-    CheckBox cbLookingForPlaymates;
-    EditText etOwnerName;
-    EditText etOwnerContact;
-    Button btnSignup;
-    Button btnLogin;
+    private EditText etUsername;
+    private EditText etPassword;
+    private EditText etConfirmPassword;
+    private EditText etBreed;
+    private DatePicker dpBirthday;
+    private CheckBox cbLookingForPlaymates;
+    private EditText etOwnerName;
+    private EditText etOwnerContact;
+    private Button btnSignup;
+    private Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
     private void signUp() {
         //Password confirmation was invalid
         if (!etPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
-            Toast.makeText(this, "Passwor confirmation was invalid", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Password confirmation was invalid", Toast.LENGTH_SHORT).show();
             return;
         }
         ParseUser user = new ParseUser();
@@ -84,8 +85,9 @@ public class SignupActivity extends AppCompatActivity {
         user.put("breed", etBreed.getText().toString());
         user.put("birthday", getBirthdayDate());
         user.put("lookingForPlaymates", cbLookingForPlaymates.isChecked());
-        if (!etOwnerContact.getText().toString().isEmpty()) {
-            user.put("ownerContact", etOwnerContact.getText().toString());
+        String ownerContactInfo = etOwnerContact.getText().toString();
+        if (!ownerContactInfo.isEmpty()) {
+            user.put("ownerContact", ownerContactInfo);
         }
 
         user.signUpInBackground(new SignUpCallback() {
@@ -94,20 +96,18 @@ public class SignupActivity extends AppCompatActivity {
                 //Sign up succeeded
                 if (e == null){
                     goMainActivity();
+                    return;
                 }
                 //Sign up did NOT succeed
-                else {
-                    //TODO: Show specific issues to user with different toasts
-                    Toast.makeText(SignupActivity.this, "Signup was not possible", Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "Issue with signup", e);
-                }
+                //TODO: Show specific issues to user with different toasts
+                Toast.makeText(SignupActivity.this, "Signup was not possible", Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Issue with signup", e);
             }
         });
     }
 
     private Date getBirthdayDate() {
-        Date date = new Date(dpBirthday.getYear() - 1900, dpBirthday.getMonth(), dpBirthday.getDayOfMonth());
-        return date;
+        return new Date(dpBirthday.getYear() - YEAR_FIX, dpBirthday.getMonth(), dpBirthday.getDayOfMonth());
     }
 
     private void goMainActivity() {
