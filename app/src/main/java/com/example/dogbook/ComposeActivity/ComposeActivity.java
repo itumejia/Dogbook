@@ -1,13 +1,21 @@
 package com.example.dogbook.ComposeActivity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,13 +36,16 @@ import com.google.android.material.tabs.TabLayout;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
 
-public class ComposeActivity extends AppCompatActivity {
+import permissions.dispatcher.NeedsPermission;
+
+public class ComposeActivity extends AppCompatActivity implements LocationListener {
 
     private static final String APP_TAG = "Dogbook";
     private static final String TAG = "ComposeActivity";
@@ -42,6 +53,9 @@ public class ComposeActivity extends AppCompatActivity {
     private static final String photoFileName = "image.jpg";
 
     private File photoFile;
+
+    private LocationManager locationManager;
+    private Location currentLocation;
 
     private Toolbar toolbar;
     private Button btnPost;
@@ -51,6 +65,10 @@ public class ComposeActivity extends AppCompatActivity {
     private TextView tvOwner;
     private EditText etCaption;
     private TabLayout tabLayout;
+    private LocationListener locationListener;
+    private TextView tvLocationIndicator;
+    private ImageView ivLocationIcon;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +85,7 @@ public class ComposeActivity extends AppCompatActivity {
                 }
                 if (tab.getPosition() == 1) {
                     Log.i(TAG, "Current location selected");
+                    getCurrentLocation();
                 }
             }
 
@@ -104,6 +123,19 @@ public class ComposeActivity extends AppCompatActivity {
         etCaption = findViewById(R.id.etCaption);
         tabLayout = findViewById(R.id.tabLayout);
         updateUserData();
+        ivLocationIcon = findViewById(R.id.ivLocationIcon);
+        tvLocationIndicator = findViewById(R.id.tvLocationIndicator);
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                currentLocation = location;
+                locationManager.removeUpdates(this);
+                Log.d(TAG, "Latitude: " + currentLocation.getLatitude() + "Longitude: " + currentLocation.getLongitude());
+                ivLocationIcon.setVisibility(View.VISIBLE);
+                tvLocationIndicator.setVisibility(View.VISIBLE);
+            }
+        };
 
     }
 
@@ -143,6 +175,12 @@ public class ComposeActivity extends AppCompatActivity {
         if (photoFile != null) {
             post.setPhoto(new ParseFile(photoFile));
         }
+        if (currentLocation != null) {
+            ParseGeoPoint parseGeoPoint = new ParseGeoPoint();
+            parseGeoPoint.setLatitude(currentLocation.getLatitude());
+            parseGeoPoint.setLongitude(currentLocation.getLongitude());
+            post.setLocation(parseGeoPoint);
+        }
         //TODO: add indicator of "loading"
         post.saveInBackground(new SaveCallback() {
             @Override
@@ -158,6 +196,22 @@ public class ComposeActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    private void getCurrentLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+
+
     }
 
     private void launchCamera() {
@@ -201,4 +255,6 @@ public class ComposeActivity extends AppCompatActivity {
         onBackPressed();
         return super.onSupportNavigateUp();
     }
+
+
 }

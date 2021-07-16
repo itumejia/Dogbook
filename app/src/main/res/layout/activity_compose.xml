@@ -38,6 +38,33 @@
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:translationZ="1dp"
+        app:tabIconTint="@color/black"
+        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorGravity="top">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabTakePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_baseline_camera_alt_24"
+            android:text="Take a photo" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabCurrentLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_baseline_add_location_24"
+            android:text="Add current location" />
+
+    </com.google.android.material.tabs.TabLayout>
+
     <ImageView
         android:id="@+id/ivProfilePicture"
         android:layout_below="@id/toolbar"
@@ -82,37 +109,35 @@
         android:lines="3" />
 
     <ImageView
+        android:id="@+id/ivLocationIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etCaption"
+        android:layout_marginStart="10dp"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_baseline_add_location_24"
+        app:tint="@color/black" />
+
+
+    <TextView
+        android:id="@+id/tvLocationIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etCaption"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/ivLocationIcon"
+        android:text="Current location added to the post"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+    <ImageView
         android:id="@+id/ivPostPicture"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_below="@id/etCaption"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/tvLocationIndicator"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:tabIconTint="@color/black"
-        app:tabIndicatorColor="@color/white"
-        app:tabIndicatorGravity="top">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabTakePhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_baseline_camera_alt_24"
-            android:text="Take a photo" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabCurrentLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_baseline_add_location_24"
-            android:text="Add current location" />
-
-    </com.google.android.material.tabs.TabLayout>
-
 
 </RelativeLayout>
