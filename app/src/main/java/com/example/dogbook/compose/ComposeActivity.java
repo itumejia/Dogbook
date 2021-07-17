@@ -43,7 +43,7 @@ import java.io.File;
 
 import permissions.dispatcher.NeedsPermission;
 
-public class ComposeActivity extends AppCompatActivity implements LocationListener {
+public class ComposeActivity extends AppCompatActivity {
 
     private static final String APP_TAG = "Dogbook";
     private static final String TAG = "ComposeActivity";
@@ -102,25 +102,29 @@ public class ComposeActivity extends AppCompatActivity implements LocationListen
                 tvLocationIndicator.setVisibility(View.VISIBLE);
             }
         };
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Log.i(TAG, String.valueOf(tab.getPosition()));
-                if (tab.getPosition() == 0){
-                    launchCamera();
-                    return;
-                }
-                if (tab.getPosition() == 1) {
-                    Log.i(TAG, "Current location selected");
-                    getCurrentLocation();
+                switch (tab.getPosition()) {
+                    case (0):
+                        launchCamera();
+                        return;
+                    case (1):
+                        getCurrentLocation();
+                        return;
                 }
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 0){
-                    launchCamera();
-                    return;
+                switch (tab.getPosition()) {
+                    case (0):
+                        launchCamera();
+                        return;
+                    case (1):
+                        getCurrentLocation();
+                        return;
                 }
             }
 
@@ -144,10 +148,9 @@ public class ComposeActivity extends AppCompatActivity implements LocationListen
             public void done(ParseObject object, ParseException e) {
                 if(e == null) {
                     bindUserData(user);
+                    return;
                 }
-                else {
-                    Toast.makeText(ComposeActivity.this, "Failed to get user data", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(ComposeActivity.this, "Failed to get user data", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -174,10 +177,7 @@ public class ComposeActivity extends AppCompatActivity implements LocationListen
             post.setPhoto(new ParseFile(photoFile));
         }
         if (currentLocation != null) {
-            ParseGeoPoint parseGeoPoint = new ParseGeoPoint();
-            parseGeoPoint.setLatitude(currentLocation.getLatitude());
-            parseGeoPoint.setLongitude(currentLocation.getLongitude());
-            post.setLocation(parseGeoPoint);
+            addLocationData(post);
         }
         //TODO: add indicator of "loading"
         post.saveInBackground(new SaveCallback() {
@@ -187,13 +187,18 @@ public class ComposeActivity extends AppCompatActivity implements LocationListen
                     Intent intent = new Intent();
                     setResult(RESULT_OK, intent);
                     finish();
+                    return;
                 }
-                else {
-                    Toast.makeText(ComposeActivity.this, "Failed to upload post", Toast.LENGTH_SHORT).show();
-                }
-
+                Toast.makeText(ComposeActivity.this, "Failed to upload post", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void addLocationData(Post post) {
+        ParseGeoPoint parseGeoPoint = new ParseGeoPoint();
+        parseGeoPoint.setLatitude(currentLocation.getLatitude());
+        parseGeoPoint.setLongitude(currentLocation.getLongitude());
+        post.setLocation(parseGeoPoint);
     }
 
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
@@ -203,12 +208,6 @@ public class ComposeActivity extends AppCompatActivity implements LocationListen
         }
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-    }
-
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-
 
     }
 
