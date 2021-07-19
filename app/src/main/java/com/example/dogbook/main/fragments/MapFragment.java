@@ -1,6 +1,7 @@
 package com.example.dogbook.main.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,6 +14,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +28,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Arrays;
+
 import permissions.dispatcher.NeedsPermission;
 
 import static android.content.Context.LOCATION_SERVICE;
 
 public class MapFragment extends Fragment {
+
+    private static final String TAG = "MapFragment";
 
     private SupportMapFragment mapFragment;
     private LocationManager locationManager;
@@ -69,13 +75,37 @@ public class MapFragment extends Fragment {
     private void loadedMap(GoogleMap googleMap) {
         map = googleMap;
         //Once the map is loaded, set up the current location
-        getCurrentLocation();
+        getPermissionsToCurrentLocation();
     }
 
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    private void getPermissionsToCurrentLocation() {
+        //Checks permissions
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
+        getCurrentLocation();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults[0] != PackageManager.PERMISSION_DENIED) {
+                //all permissions have been granted
+                getCurrentLocation();
+                return;
+            }
+            //If permissions are not granted, current location will not be available
+            Toast.makeText(getContext(), "Permissions to get current location denied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //Permission already granted in getPermissionsToCurrentLocation()
+    @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
         locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
@@ -84,10 +114,6 @@ public class MapFragment extends Fragment {
             }
         };
 
-        //Checks permissions
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }
         //Set up of blue icon current location indicator
         map.setMyLocationEnabled(true);
         //Start listener for changes
@@ -101,6 +127,7 @@ public class MapFragment extends Fragment {
             LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
             map.animateCamera(cameraUpdate);
+            return;
 
         }
         Toast.makeText(getContext(), "Could not get current location", Toast.LENGTH_SHORT).show();
