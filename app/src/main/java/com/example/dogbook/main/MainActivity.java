@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.example.dogbook.compose.ComposeActivity;
 import com.example.dogbook.login.LoginActivity;
+import com.example.dogbook.main.fragments.MapFragment;
 import com.example.dogbook.main.fragments.TimelineFragment;
 import com.example.dogbook.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -42,9 +43,23 @@ public class MainActivity extends AppCompatActivity {
         navigationBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                Fragment fragment = new TimelineFragment();
-                fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-                return true;
+                Fragment fragment;
+                switch (item.getItemId()) {
+                    case R.id.item_home:
+                        fragment = new TimelineFragment();
+                        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                        return true;
+
+                    case R.id.item_dogs_nearby:
+                        fragment = new MapFragment();
+                        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                        return true;
+
+                    default:
+                        fragment = new TimelineFragment();
+                        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                        return true;
+                }
             }
         });
 
