@@ -46,17 +46,13 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment;
                 switch (item.getItemId()) {
                     case R.id.item_home:
+                    default:
                         fragment = new TimelineFragment();
                         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
                         return true;
 
                     case R.id.item_dogs_nearby:
                         fragment = new MapFragment();
-                        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
-                        return true;
-
-                    default:
-                        fragment = new TimelineFragment();
                         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
                         return true;
                 }
