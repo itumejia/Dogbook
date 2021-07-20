@@ -51,6 +51,9 @@ public class ComposeActivity extends AppCompatActivity {
     private static final String TAG = "ComposeActivity";
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 123;
     private static final String PHOTO_FILE_NAME = "image.jpg";
+    private static final int CURRENT_LOCATION_PERMISSION_REQUEST_CODE = 63;
+    private static final int MIN_DISTANCE_CHANGED = 0;
+    private static final int MIN_TIME_CHANGED = 0;
 
     private File photoFile;
 
@@ -207,10 +210,10 @@ public class ComposeActivity extends AppCompatActivity {
     private void getCurrentLocation() {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, CURRENT_LOCATION_PERMISSION_REQUEST_CODE);
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_CHANGED, MIN_DISTANCE_CHANGED, locationListener);
 
     }
 
@@ -218,10 +221,10 @@ public class ComposeActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
+        if (requestCode == CURRENT_LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults[0] != PackageManager.PERMISSION_DENIED) {
                 //all permissions have been granted
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_CHANGED, MIN_DISTANCE_CHANGED, locationListener);
                 return;
             }
             //If permissions are not granted, current location will not be available

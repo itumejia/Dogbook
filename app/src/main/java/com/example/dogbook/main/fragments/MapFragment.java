@@ -10,11 +10,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +26,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.Arrays;
-
 import permissions.dispatcher.NeedsPermission;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -37,6 +33,10 @@ import static android.content.Context.LOCATION_SERVICE;
 public class MapFragment extends Fragment {
 
     private static final String TAG = "MapFragment";
+    private static final int CURRENT_LOCATION_PERMISSION_REQUEST_CODE = 64;
+    private static final int MIN_DISTANCE_CHANGED = 4;
+    private static final int MIN_TIME_CHANGED = 0;
+    private static final int MAP_FOCUS_ZOOM = 17;
 
     private SupportMapFragment mapFragment;
     private LocationManager locationManager;
@@ -61,28 +61,29 @@ public class MapFragment extends Fragment {
     }
 
     private void setUpMap() {
-        if (mapFragment == null) {
-            mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
-            mapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    loadedMap(googleMap);
-                }
-            });
+        if (mapFragment != null) {
+            return;
         }
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                loadedMap(googleMap);
+            }
+        });
     }
 
     private void loadedMap(GoogleMap googleMap) {
         map = googleMap;
         //Once the map is loaded, set up the current location
-        getPermissionsToCurrentLocation();
+        requestPermissionsForCurrentLocation();
     }
 
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
-    private void getPermissionsToCurrentLocation() {
+    private void requestPermissionsForCurrentLocation() {
         //Checks permissions
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, CURRENT_LOCATION_PERMISSION_REQUEST_CODE);
             return;
         }
         getCurrentLocation();
@@ -91,7 +92,7 @@ public class MapFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
+        if (requestCode == CURRENT_LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults[0] != PackageManager.PERMISSION_DENIED) {
                 //all permissions have been granted
                 getCurrentLocation();
@@ -117,19 +118,18 @@ public class MapFragment extends Fragment {
         //Set up of blue icon current location indicator
         map.setMyLocationEnabled(true);
         //Start listener for changes
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 4, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_CHANGED, MIN_DISTANCE_CHANGED, locationListener);
 
     }
 
     //Show current location on the view (move the camera)
     private void displayLocation() {
-        if(currentLocation != null) {
-            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-            map.animateCamera(cameraUpdate);
+        if (currentLocation == null) {
+            Toast.makeText(getContext(), "Could not get current location", Toast.LENGTH_SHORT).show();
             return;
-
         }
-        Toast.makeText(getContext(), "Could not get current location", Toast.LENGTH_SHORT).show();
+        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, MAP_FOCUS_ZOOM);
+        map.animateCamera(cameraUpdate);
     }
 }
