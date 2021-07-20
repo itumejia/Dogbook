@@ -13,18 +13,30 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.dogbook.R;
+import com.example.dogbook.main.models.Post;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import permissions.dispatcher.NeedsPermission;
 
@@ -36,13 +48,15 @@ public class MapFragment extends Fragment {
     private static final int CURRENT_LOCATION_PERMISSION_REQUEST_CODE = 64;
     private static final int MIN_DISTANCE_CHANGED = 4;
     private static final int MIN_TIME_CHANGED = 0;
-    private static final int MAP_FOCUS_ZOOM = 17;
+    private static final int MAP_FOCUS_ZOOM = 10;
 
     private SupportMapFragment mapFragment;
     private LocationManager locationManager;
     private Location currentLocation;
     private LocationListener locationListener;
     private GoogleMap map;
+    private List<Post> posts;
+    private List<Marker> markers = new ArrayList<>();
 
     public MapFragment() { }
 
@@ -77,6 +91,15 @@ public class MapFragment extends Fragment {
         map = googleMap;
         //Once the map is loaded, set up the current location
         requestPermissionsForCurrentLocation();
+        getLocationPosts();
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                //TODO: Navigate to post details view
+                Post post = (Post) marker.getTag();
+                Log.i(TAG, "Post selected, caption: " + post.getDescription());
+            }
+        });
     }
 
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
@@ -131,5 +154,40 @@ public class MapFragment extends Fragment {
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, MAP_FOCUS_ZOOM);
         map.animateCamera(cameraUpdate);
+    }
+
+    private void getLocationPosts() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.orderByDescending("createdAt");
+        query.include("author");
+        query.whereExists("location");
+        //TODO: Filter posts to only get the ones near the current location (fixed distance limit)
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+                if (e == null) {
+                    posts = objects;
+                    addMarkers();
+                    return;
+                }
+                Log.e(TAG, "Issue finding posts in Parse", e);
+                Toast.makeText(getContext(), "Unable to refresh posts", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void addMarkers() {
+        for (Post post: posts) {
+            ParseGeoPoint location = post.getLocation();
+            LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+            Marker marker = map.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(post.getAuthor().getUsername())
+                    .snippet(post.getDescription())
+            );
+            marker.setTag(post);
+            markers.add(marker);
+        }
+
     }
 }
