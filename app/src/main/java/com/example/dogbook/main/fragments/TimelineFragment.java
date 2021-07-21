@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.dogbook.common.ParseApplication;
 import com.example.dogbook.main.adapters.PostsAdapter;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
@@ -66,10 +67,7 @@ public class TimelineFragment extends Fragment {
 
 
     private void refreshPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.setLimit(20);
-        query.orderByDescending("createdAt");
-        query.include("author");
+        ParseQuery<Post> query = ParseApplication.getAllPostsQuery();
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
