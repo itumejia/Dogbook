@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.dogbook.R;
+import com.example.dogbook.common.ParseApplication;
 import com.example.dogbook.main.models.Post;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -165,10 +166,7 @@ public class MapFragment extends Fragment {
     }
 
     private void getLocationPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.orderByDescending("createdAt");
-        query.include("author");
-        query.whereExists("location");
+        ParseQuery<Post> query = ParseApplication.getLocationPostQuery();
         //TODO: Filter posts to only get the ones near the current location (fixed distance limit)
         query.findInBackground(new FindCallback<Post>() {
             @Override
@@ -185,7 +183,7 @@ public class MapFragment extends Fragment {
     }
 
     private void addMarkers() {
-        for (Post post: posts) {
+        for (Post post : posts) {
             ParseGeoPoint location = post.getLocation();
             LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
             Marker marker = map.addMarker(new MarkerOptions()

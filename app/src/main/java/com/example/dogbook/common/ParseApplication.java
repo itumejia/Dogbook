@@ -6,6 +6,7 @@ import com.example.dogbook.main.models.Post;
 import com.example.dogbook.main.models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class ParseApplication extends Application {
@@ -27,5 +28,21 @@ public class ParseApplication extends Application {
                 .server(server)
                 .build()
         );
+    }
+
+    public static ParseQuery<Post> getLocationPostQuery() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.orderByDescending("createdAt");
+        query.include("author");
+        query.whereExists("location");
+        return query;
+    }
+
+    public static ParseQuery<Post> getAllPostsQuery() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.setLimit(20);
+        query.orderByDescending("createdAt");
+        query.include("author");
+        return query;
     }
 }
