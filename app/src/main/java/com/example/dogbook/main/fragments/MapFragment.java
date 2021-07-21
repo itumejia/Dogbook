@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,6 +58,7 @@ public class MapFragment extends Fragment {
     private GoogleMap map;
     private List<Post> posts;
     private List<Marker> markers = new ArrayList<>();
+    private FragmentManager fragmentManager;
 
     public MapFragment() { }
 
@@ -70,6 +72,7 @@ public class MapFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        fragmentManager = getParentFragmentManager();
         //Load the Google Map
         setUpMap();
     }
@@ -97,6 +100,11 @@ public class MapFragment extends Fragment {
             public void onInfoWindowClick(Marker marker) {
                 //TODO: Navigate to post details view
                 Post post = (Post) marker.getTag();
+                PostDetailsFragment fragment = new PostDetailsFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, fragment.newInstance(post))
+                        .addToBackStack(null)
+                        .commit();
                 Log.i(TAG, "Post selected, caption: " + post.getDescription());
             }
         });

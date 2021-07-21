@@ -21,6 +21,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private ImageView ivPostPicture;
     private TextView tvUsername;
     private TextView tvOwner;
+    private TextView tvRelativeTime;
     private TextView tvCaption;
     private Context context;
 
@@ -30,6 +31,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         ivPostPicture = itemView.findViewById(R.id.ivPostPicture);
         tvUsername = itemView.findViewById(R.id.tvUsername);
         tvOwner = itemView.findViewById(R.id.tvOwner);
+        tvRelativeTime = itemView.findViewById(R.id.tvRelativeTime);
         tvCaption = itemView.findViewById(R.id.tvCaption);
         this.context = context;
     }
@@ -42,6 +44,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         tvUsername.setText(post.getAuthor().getUsername());
         tvOwner.setText(String.format("from %s", post.getAuthor().getString(User.KEY_OWNER_NAME)));
+        tvRelativeTime.setText(post.getRelativeTime());
         tvCaption.setText(post.getDescription());
 
         ParseFile postPicture = post.getPhoto();
