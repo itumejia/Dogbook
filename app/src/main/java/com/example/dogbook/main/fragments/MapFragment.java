@@ -103,7 +103,7 @@ public class MapFragment extends Fragment {
                 Post post = (Post) marker.getTag();
                 PostDetailsFragment fragment = new PostDetailsFragment();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, fragment.newInstance(post))
+                        .replace(R.id.mapFragmentContainer, fragment.newInstance(post))
                         .addToBackStack(null)
                         .commit();
                 Log.i(TAG, "Post selected, caption: " + post.getDescription());
@@ -196,4 +196,5 @@ public class MapFragment extends Fragment {
         }
 
     }
+
 }

@@ -6,14 +6,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.example.dogbook.compose.ComposeActivity;
 import com.example.dogbook.login.LoginActivity;
+import com.example.dogbook.main.adapters.ViewPagerAdapter;
 import com.example.dogbook.main.fragments.MapFragment;
 import com.example.dogbook.main.fragments.TimelineFragment;
 import com.example.dogbook.R;
@@ -25,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_COMPOSE_ACTIVITY = 2905;
     private Toolbar toolbar;
     private BottomNavigationView navigationBar;
+    private ViewPager2 viewPager;
+    private FragmentStateAdapter pagerAdapter;
     private FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
@@ -39,6 +49,32 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+        viewPager = findViewById(R.id.viewPager);
+        pagerAdapter = new ViewPagerAdapter(this);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                switch (position) {
+                    case 0:
+                        viewPager.setUserInputEnabled(true);
+                        navigationBar.setSelectedItemId(R.id.item_home);
+                        return;
+                    case 1:
+                        viewPager.setUserInputEnabled(false);
+                        navigationBar.setSelectedItemId(R.id.item_dogs_nearby);
+                        return;
+                    default:
+                        viewPager.setUserInputEnabled(true);
+                        navigationBar.setSelectedItemId(R.id.item_my_profile);
+                        return;
+
+                }
+            }
+        });
+
+
         navigationBar = findViewById(R.id.navigationBar);
         navigationBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -46,19 +82,20 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment;
                 switch (item.getItemId()) {
                     case R.id.item_home:
-                    default:
-                        fragment = new TimelineFragment();
-                        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                        viewPager.setCurrentItem(0);
                         return true;
 
                     case R.id.item_dogs_nearby:
-                        fragment = new MapFragment();
-                        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+                        viewPager.setCurrentItem(1);
                         return true;
+
+                    default:
+                        viewPager.setCurrentItem(2);
+                        return true;
+
                 }
             }
         });
-
         navigationBar.setSelectedItemId(R.id.item_home); //Display home when initialized
 
     }
@@ -91,16 +128,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_COMPOSE_ACTIVITY && resultCode == RESULT_OK && isFragmentContainerATimelineFragment()) {
+        //A new post was composed
+        if (requestCode == REQUEST_CODE_COMPOSE_ACTIVITY && resultCode == RESULT_OK) {
             navigationBar.setSelectedItemId(R.id.item_home);
+            //TODO: Update the main timeline
         }
     }
 
-    private boolean isFragmentContainerATimelineFragment(){
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragmentContainer);
-        if (fragment instanceof TimelineFragment) {
-            return true;
-        }
-        return false;
-    }
 }
