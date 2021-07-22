@@ -1,5 +1,10 @@
 package com.example.dogbook.main.models;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
@@ -12,7 +17,7 @@ import java.util.Date;
 
 @Parcel(analyze = Post.class)
 @ParseClassName("Post")
-public class Post extends ParseObject {
+public class Post extends ParseObject implements ClusterItem {
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_PHOTO = "photo";
     public static final String KEY_LOCATION = "location";
@@ -75,5 +80,24 @@ public class Post extends ParseObject {
         } else {
             return diff / DAY_MILLIS + " d";
         }
+    }
+
+    @NonNull
+    @Override
+    public LatLng getPosition() {
+        ParseGeoPoint location = this.getLocation();
+        return new LatLng(location.getLatitude(), location.getLongitude());
+    }
+
+    @Nullable
+    @Override
+    public String getTitle() {
+        return this.getAuthor().getUsername();
+    }
+
+    @Nullable
+    @Override
+    public String getSnippet() {
+        return this.getDescription();
     }
 }

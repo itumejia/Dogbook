@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.dogbook.R;
 import com.example.dogbook.common.ParseApplication;
+import com.example.dogbook.main.mapclusteringrender.MapClusteringRenderer;
 import com.example.dogbook.main.models.Post;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -60,6 +62,9 @@ public class MapFragment extends Fragment {
     private List<Post> posts;
     private List<Marker> markers = new ArrayList<>();
     private FragmentManager fragmentManager;
+
+    ClusterManager<Post> clusterManager;
+    MapClusteringRenderer clusterRenderer;
 
     public MapFragment() { }
 
@@ -95,20 +100,18 @@ public class MapFragment extends Fragment {
         map = googleMap;
         //Once the map is loaded, set up the current location
         requestPermissionsForCurrentLocation();
+        setUpClusterManager();
         getLocationPosts();
-        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                //TODO: Navigate to post details view
-                Post post = (Post) marker.getTag();
-                PostDetailsFragment fragment = new PostDetailsFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.mapFragmentContainer, fragment.newInstance(post))
-                        .addToBackStack(null)
-                        .commit();
-                Log.i(TAG, "Post selected, caption: " + post.getDescription());
-            }
-        });
+    }
+
+    private void setUpClusterManager() {
+        clusterManager = new ClusterManager<>(getContext(), map);
+        clusterRenderer = new MapClusteringRenderer(getContext(), map, clusterManager);
+        clusterRenderer.setMinClusterSize(2);
+        clusterManager.setRenderer(clusterRenderer);
+        map.setOnCameraIdleListener(clusterManager);
+        map.setOnMarkerClickListener(clusterManager);
+        map.setOnInfoWindowClickListener(clusterManager);
     }
 
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
@@ -167,34 +170,20 @@ public class MapFragment extends Fragment {
 
     private void getLocationPosts() {
         ParseQuery<Post> query = ParseApplication.getLocationPostQuery();
-        //TODO: Filter posts to only get the ones near the current location (fixed distance limit)
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
                     posts = objects;
-                    addMarkers();
+                    clusterManager.clearItems();
+                    clusterManager.addItems(objects);
+                    clusterManager.cluster();
                     return;
                 }
                 Log.e(TAG, "Issue finding posts in Parse", e);
                 Toast.makeText(getContext(), "Unable to refresh posts", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void addMarkers() {
-        for (Post post : posts) {
-            ParseGeoPoint location = post.getLocation();
-            LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-            Marker marker = map.addMarker(new MarkerOptions()
-                    .position(position)
-                    .title(post.getAuthor().getUsername())
-                    .snippet(post.getDescription())
-            );
-            marker.setTag(post);
-            markers.add(marker);
-        }
-
     }
 
 }
