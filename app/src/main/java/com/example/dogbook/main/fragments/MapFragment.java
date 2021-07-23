@@ -109,6 +109,16 @@ public class MapFragment extends Fragment {
         clusterRenderer = new MapClusteringRenderer(getContext(), map, clusterManager);
         clusterRenderer.setMinClusterSize(2);
         clusterManager.setRenderer(clusterRenderer);
+        clusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<Post>() {
+            @Override
+            public void onClusterItemInfoWindowClick(Post item) {
+                PostDetailsFragment fragment = new PostDetailsFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.mapFragmentContainer, fragment.newInstance(item))
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
         map.setOnCameraIdleListener(clusterManager);
         map.setOnMarkerClickListener(clusterManager);
         map.setOnInfoWindowClickListener(clusterManager);
