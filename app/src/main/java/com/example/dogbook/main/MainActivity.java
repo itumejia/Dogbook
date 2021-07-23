@@ -22,6 +22,7 @@ import android.view.View;
 import com.example.dogbook.compose.ComposeActivity;
 import com.example.dogbook.login.LoginActivity;
 import com.example.dogbook.main.adapters.ViewPagerAdapter;
+import com.example.dogbook.main.fragments.MapContainerFragment;
 import com.example.dogbook.main.fragments.MapFragment;
 import com.example.dogbook.main.fragments.TimelineFragment;
 import com.example.dogbook.R;
@@ -131,8 +132,13 @@ public class MainActivity extends AppCompatActivity {
         //A new post was composed
         if (requestCode == REQUEST_CODE_COMPOSE_ACTIVITY && resultCode == RESULT_OK) {
             navigationBar.setSelectedItemId(R.id.item_home);
-            //TODO: Update the main timeline
+            updateTimeline();
         }
     }
 
+    private void updateTimeline() {
+        TimelineFragment timelineFragment = (TimelineFragment) fragmentManager.findFragmentByTag("f" + ViewPagerAdapter.TIMELINE_PAGE);
+        timelineFragment.refreshPosts();
+        pagerAdapter.notifyItemChanged(ViewPagerAdapter.TIMELINE_PAGE);
+    }
 }

@@ -15,7 +15,8 @@ import com.example.dogbook.R;
 
 public class MapContainerFragment extends Fragment {
 
-    FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
+    private static final String MAP_FRAGMENT_TAG = "mapFragment";
 
     public MapContainerFragment() {
         // Required empty public constructor
@@ -31,7 +32,7 @@ public class MapContainerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Fragment fragment = new MapFragment();
-        fragmentManager = getParentFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.mapFragmentContainer, fragment).commit();
+        fragmentManager = getChildFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.mapFragmentContainer, fragment, MAP_FRAGMENT_TAG).commit();
     }
 }
