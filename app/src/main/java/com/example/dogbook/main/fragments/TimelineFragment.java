@@ -66,7 +66,7 @@ public class TimelineFragment extends Fragment {
     }
 
 
-    private void refreshPosts() {
+    public void refreshPosts() {
         ParseQuery<Post> query = ParseApplication.getAllPostsQuery();
         query.findInBackground(new FindCallback<Post>() {
             @Override
@@ -75,6 +75,7 @@ public class TimelineFragment extends Fragment {
                     posts.clear();
                     posts.addAll(objects);
                     postsAdapter.notifyDataSetChanged();
+                    rvPosts.smoothScrollToPosition(0);
                     return;
                 }
                 Log.e(TAG, "Issue finding posts in Parse", e);

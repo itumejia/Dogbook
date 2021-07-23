@@ -16,6 +16,7 @@ import com.example.dogbook.main.fragments.TimelineFragment;
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
     private static final int NUM_PAGES = 3;
+    public static final int TIMELINE_PAGE = 0;
 
     public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
@@ -37,6 +38,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public int getItemCount() {
         return NUM_PAGES;
     }
+
 
 
 }

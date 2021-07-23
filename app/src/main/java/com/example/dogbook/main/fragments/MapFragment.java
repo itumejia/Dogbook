@@ -63,8 +63,8 @@ public class MapFragment extends Fragment {
     private List<Marker> markers = new ArrayList<>();
     private FragmentManager fragmentManager;
 
-    ClusterManager<Post> clusterManager;
-    MapClusteringRenderer clusterRenderer;
+    private ClusterManager<Post> clusterManager;
+    private MapClusteringRenderer clusterRenderer;
 
     public MapFragment() { }
 
