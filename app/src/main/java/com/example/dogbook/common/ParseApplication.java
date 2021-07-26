@@ -4,7 +4,9 @@ import android.app.Application;
 
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.main.models.User;
+import com.google.android.gms.maps.model.LatLng;
 import com.parse.Parse;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -35,6 +37,17 @@ public class ParseApplication extends Application {
         query.orderByDescending("createdAt");
         query.include("author");
         query.whereExists("location");
+        return query;
+    }
+
+    public static ParseQuery<Post> getLocationPostWithinBoundsQuery(LatLng northeast, LatLng southwest) {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.orderByDescending("createdAt");
+        query.include("author");
+        query.whereExists("location");
+        ParseGeoPoint northeastGeoPoint = new ParseGeoPoint(northeast.latitude, northeast.longitude);
+        ParseGeoPoint southwestGeoPoint = new ParseGeoPoint(southwest.latitude, southwest.longitude);
+        query.whereWithinGeoBox("location", northeastGeoPoint, southwestGeoPoint);
         return query;
     }
 
