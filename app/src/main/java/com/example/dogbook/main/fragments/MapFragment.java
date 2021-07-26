@@ -31,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
@@ -50,14 +51,11 @@ public class MapFragment extends Fragment {
 
     private static final String TAG = "MapFragment";
     private static final int CURRENT_LOCATION_PERMISSION_REQUEST_CODE = 64;
-    private static final int MIN_DISTANCE_CHANGED = 4;
-    private static final int MIN_TIME_CHANGED = 0;
     private static final int MAP_FOCUS_ZOOM = 10;
 
     private SupportMapFragment mapFragment;
     private LocationManager locationManager;
     private Location currentLocation;
-    private LocationListener locationListener;
     private GoogleMap map;
     private List<Post> posts;
     private List<Marker> markers = new ArrayList<>();
@@ -65,6 +63,8 @@ public class MapFragment extends Fragment {
 
     private ClusterManager<Post> clusterManager;
     private MapClusteringRenderer clusterRenderer;
+
+    private LatLngBounds coveredAreaBox;
 
     public MapFragment() { }
 
@@ -101,7 +101,16 @@ public class MapFragment extends Fragment {
         //Once the map is loaded, set up the current location
         requestPermissionsForCurrentLocation();
         setUpClusterManager();
-        getLocationPosts();
+//        getLocationPosts();
+        map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                LatLngBounds latLngBounds = map.getProjection().getVisibleRegion().latLngBounds;
+                LatLng northeast = latLngBounds.northeast;
+                LatLng southwest = latLngBounds.southwest;
+
+            }
+        });
     }
 
     private void setUpClusterManager() {
@@ -134,6 +143,7 @@ public class MapFragment extends Fragment {
         getCurrentLocation();
     }
 
+    //Callback from getting the results from permissions request
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -152,24 +162,17 @@ public class MapFragment extends Fragment {
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
         locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                currentLocation = location;
-                displayLocation(); //Map camera focuses on changed location
-            }
-        };
-
         //Set up of blue icon current location indicator
         map.setMyLocationEnabled(true);
-        //Start listener for changes
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_CHANGED, MIN_DISTANCE_CHANGED, locationListener);
-
+        //Get current location ONCE
+        currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        displayLocation();
     }
 
     //Show current location on the view (move the camera)
     private void displayLocation() {
         if (currentLocation == null) {
+            Log.e(TAG, "Current location not found");
             Toast.makeText(getContext(), "Could not get current location", Toast.LENGTH_SHORT).show();
             return;
         }
