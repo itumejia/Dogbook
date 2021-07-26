@@ -62,4 +62,6 @@ public class MapClusteringRenderer extends DefaultClusterRenderer<Post> {
                     });
         }
     }
+
+
 }

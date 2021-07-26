@@ -65,6 +65,7 @@ public class MapFragment extends Fragment {
     private MapClusteringRenderer clusterRenderer;
 
     private LatLngBounds coveredAreaBox;
+    private LatLngBounds visibleAreaBox;
 
     public MapFragment() { }
 
@@ -98,19 +99,17 @@ public class MapFragment extends Fragment {
 
     private void loadedMap(GoogleMap googleMap) {
         map = googleMap;
-        //Once the map is loaded, set up the current location
-        requestPermissionsForCurrentLocation();
         setUpClusterManager();
-//        getLocationPosts();
         map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                LatLngBounds latLngBounds = map.getProjection().getVisibleRegion().latLngBounds;
-                LatLng northeast = latLngBounds.northeast;
-                LatLng southwest = latLngBounds.southwest;
-
+                visibleAreaBox = map.getProjection().getVisibleRegion().latLngBounds;
+                updateCoveredAreaBox();
+                clusterManager.onCameraIdle();
             }
         });
+
+        requestPermissionsForCurrentLocation();
     }
 
     private void setUpClusterManager() {
@@ -128,7 +127,6 @@ public class MapFragment extends Fragment {
                         .commit();
             }
         });
-        map.setOnCameraIdleListener(clusterManager);
         map.setOnMarkerClickListener(clusterManager);
         map.setOnInfoWindowClickListener(clusterManager);
     }
@@ -179,6 +177,18 @@ public class MapFragment extends Fragment {
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, MAP_FOCUS_ZOOM);
         map.animateCamera(cameraUpdate);
+    }
+
+    private void updateCoveredAreaBox() {
+        double longitudeLength = visibleAreaBox.northeast.longitude - visibleAreaBox.southwest.longitude;
+        double latitudeLength = visibleAreaBox.northeast.latitude - visibleAreaBox.southwest.latitude;
+        LatLng northeast = new LatLng(visibleAreaBox.northeast.latitude + (latitudeLength * 0.25), visibleAreaBox.northeast.longitude + (longitudeLength * 0.25));
+        LatLng southwest = new LatLng(visibleAreaBox.southwest.latitude - (latitudeLength * 0.25), visibleAreaBox.southwest.longitude - (longitudeLength * 0.25));
+        coveredAreaBox = new LatLngBounds(southwest, northeast);
+
+        Log.i(TAG, "Cuurent visible box: " + visibleAreaBox.toString());
+        Log.i(TAG, "New CAB: " + coveredAreaBox.toString());
+
     }
 
     private void getLocationPosts() {
