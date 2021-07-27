@@ -68,7 +68,9 @@ public class MapFragment extends Fragment {
 
     private LatLngBounds coveredAreaBox;
 
-    public MapFragment() { }
+    private Thread updatePostsThread;
+
+    public MapFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,7 +109,13 @@ public class MapFragment extends Fragment {
                 LatLngBounds visibleAreaBox = map.getProjection().getVisibleRegion().latLngBounds;
                 Log.i(TAG, "New visible box: " + visibleAreaBox.toString());
                 if (!isVisibleAreaCovered(visibleAreaBox)) {
-                    updateCoveredAreaBox(visibleAreaBox);
+                    if (updatePostsThread != null && updatePostsThread.isAlive()) {
+                        updatePostsThread.interrupt();
+                    }
+                    updatePostsThread = new Thread(new UpdatePostsRunnable(visibleAreaBox));
+                    updatePostsThread.start();
+
+
                 }
                 clusterManager.onCameraIdle();
             }
@@ -181,6 +189,21 @@ public class MapFragment extends Fragment {
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, MAP_FOCUS_ZOOM);
         map.animateCamera(cameraUpdate);
+    }
+
+    public class UpdatePostsRunnable implements Runnable {
+
+        LatLngBounds visibleAreaBox;
+
+        public UpdatePostsRunnable(LatLngBounds visibleAreaBox) {
+            this.visibleAreaBox = visibleAreaBox;
+        }
+
+        @Override
+        public void run() {
+            updateCoveredAreaBox(visibleAreaBox);
+
+        }
     }
 
     private void updateCoveredAreaBox(LatLngBounds visibleAreaBox) {
