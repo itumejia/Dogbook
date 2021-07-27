@@ -11,6 +11,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ParseApplication extends Application {
 
     private static final String applicationId = "T1jE58fMZ8vK3hhqx6unQjQTOqD00iq710HO6a6H";
@@ -40,15 +43,46 @@ public class ParseApplication extends Application {
         return query;
     }
 
-    public static ParseQuery<Post> getLocationPostWithinBoundsQuery(LatLng northeast, LatLng southwest) {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.orderByDescending("createdAt");
-        query.include("author");
-        query.whereExists("location");
+    public static ParseQuery<Post> getLocationPostWithinBoundsQuery(LatLng southwest, LatLng northeast) {
+        ParseQuery<Post> mainQuery = ParseQuery.getQuery(Post.class);
+        //Parse whereWithinGeoBox queries have conflict when the given box rounds the Earth.
+        //So first we check if the query needs special treatment because of this
+        if (southwest.longitude > northeast.longitude) {
+            return getLocationPostWithinBoundsQueryFixed(southwest, northeast);
+        }
+        mainQuery.include("author");
         ParseGeoPoint northeastGeoPoint = new ParseGeoPoint(northeast.latitude, northeast.longitude);
         ParseGeoPoint southwestGeoPoint = new ParseGeoPoint(southwest.latitude, southwest.longitude);
-        query.whereWithinGeoBox("location", northeastGeoPoint, southwestGeoPoint);
-        return query;
+        mainQuery.whereWithinGeoBox("location", northeastGeoPoint, southwestGeoPoint);
+
+        return mainQuery;
+    }
+
+    //Special query for boxes that round the Earth
+    private static ParseQuery<Post> getLocationPostWithinBoundsQueryFixed(LatLng southwest, LatLng northeast) {
+        ParseGeoPoint northeastGeoPoint;
+        ParseGeoPoint southwestGeoPoint;
+
+        //Make a query that goes from the given west, to the east limit 180
+        ParseQuery<Post> eastQuery = ParseQuery.getQuery(Post.class);
+        southwestGeoPoint = new ParseGeoPoint(southwest.latitude, southwest.longitude);
+        northeastGeoPoint = new ParseGeoPoint(northeast.latitude, 180);
+        eastQuery.whereWithinGeoBox("location", southwestGeoPoint, northeastGeoPoint);
+
+        //Make a query that goes from the west limit -180 to the given east
+        ParseQuery<Post> westQuery = ParseQuery.getQuery(Post.class);
+        southwestGeoPoint = new ParseGeoPoint(southwest.latitude, -180);
+        northeastGeoPoint = new ParseGeoPoint(northeast.latitude, northeast.longitude);
+        westQuery.whereWithinGeoBox("location", southwestGeoPoint, northeastGeoPoint);
+
+        //Compound OR query
+        List<ParseQuery<Post>> queries = new ArrayList<>();
+        queries.add(eastQuery);
+        queries.add(westQuery);
+
+        ParseQuery<Post> mainQuery = ParseQuery.or(queries);
+        mainQuery.include("author");
+        return mainQuery;
     }
 
     public static ParseQuery<Post> getAllPostsQuery() {
