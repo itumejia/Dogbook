@@ -53,7 +53,7 @@ public class MapFragment extends Fragment {
     private static final String TAG = "MapFragment";
     private static final int CURRENT_LOCATION_PERMISSION_REQUEST_CODE = 64;
     private static final int MAP_FOCUS_ZOOM = 10;
-    private static final float COVERED_AREA_EXTRA_PERCENTAGE = 2; //50% of the visible area length added for each side
+    private static final float COVERED_AREA_EXTRA_PERCENTAGE = 2; //The covered area box will be 200% the length of the current visible box
 
     private SupportMapFragment mapFragment;
     private LocationManager locationManager;
@@ -67,7 +67,6 @@ public class MapFragment extends Fragment {
     private MapClusteringRenderer clusterRenderer;
 
     private LatLngBounds coveredAreaBox;
-    private LatLngBounds visibleAreaBox;
 
     public MapFragment() { }
 
@@ -105,10 +104,10 @@ public class MapFragment extends Fragment {
         map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                visibleAreaBox = map.getProjection().getVisibleRegion().latLngBounds;
+                LatLngBounds visibleAreaBox = map.getProjection().getVisibleRegion().latLngBounds;
                 Log.i(TAG, "New visible box: " + visibleAreaBox.toString());
-                if (!isVisibleAreaCovered()) {
-                    updateCoveredAreaBox();
+                if (!isVisibleAreaCovered(visibleAreaBox)) {
+                    updateCoveredAreaBox(visibleAreaBox);
                 }
                 clusterManager.onCameraIdle();
             }
@@ -184,12 +183,13 @@ public class MapFragment extends Fragment {
         map.animateCamera(cameraUpdate);
     }
 
-    private void updateCoveredAreaBox() {
+    private void updateCoveredAreaBox(LatLngBounds visibleAreaBox) {
         double longitudeLength = abs(visibleAreaBox.northeast.longitude - visibleAreaBox.southwest.longitude);
         double latitudeLength = abs(visibleAreaBox.northeast.latitude - visibleAreaBox.southwest.latitude);
+        //The percentage that will be added per side, will be the total percentage minus 1 (100% of the visible box), divided by two because the percentage left has to be divided between the two sides
         float extraPercentageBySide = (COVERED_AREA_EXTRA_PERCENTAGE - 1)/2;
 
-        //Reduce percentage if the area exceeds the map
+        //Reduce percentage if the area exceeds the map horizontally, since the map has 360 longitude degrees
         if (longitudeLength * COVERED_AREA_EXTRA_PERCENTAGE >= 360) {
             extraPercentageBySide = (float) 0.25;
         }
@@ -201,7 +201,7 @@ public class MapFragment extends Fragment {
         Log.i(TAG, "New CAB: " + coveredAreaBox.toString());
     }
 
-    private boolean isVisibleAreaCovered() {
+    private boolean isVisibleAreaCovered(LatLngBounds visibleAreaBox) {
         //First time, the cab will be null, so we want to update it
         if (coveredAreaBox == null) {
             return false;
