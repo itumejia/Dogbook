@@ -199,6 +199,8 @@ public class MapFragment extends Fragment {
 
         coveredAreaBox = new LatLngBounds(southwest, northeast);
         Log.i(TAG, "New CAB: " + coveredAreaBox.toString());
+
+        getPostsForCoveredAreaBox();
     }
 
     private boolean isVisibleAreaCovered(LatLngBounds visibleAreaBox) {
@@ -212,8 +214,8 @@ public class MapFragment extends Fragment {
         return false;
     }
 
-    private void getLocationPosts() {
-        ParseQuery<Post> query = ParseApplication.getLocationPostQuery();
+    private void getPostsForCoveredAreaBox() {
+        ParseQuery<Post> query = ParseApplication.getLocationPostWithinBoundsQuery(coveredAreaBox.southwest, coveredAreaBox.northeast);
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
