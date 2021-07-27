@@ -46,12 +46,14 @@ import java.util.List;
 import permissions.dispatcher.NeedsPermission;
 
 import static android.content.Context.LOCATION_SERVICE;
+import static java.lang.Math.abs;
 
 public class MapFragment extends Fragment {
 
     private static final String TAG = "MapFragment";
     private static final int CURRENT_LOCATION_PERMISSION_REQUEST_CODE = 64;
     private static final int MAP_FOCUS_ZOOM = 10;
+    private static final float COVERED_AREA_EXTRA_PERCENTAGE = 2; //50% of the visible area length added for each side
 
     private SupportMapFragment mapFragment;
     private LocationManager locationManager;
@@ -104,7 +106,10 @@ public class MapFragment extends Fragment {
             @Override
             public void onCameraIdle() {
                 visibleAreaBox = map.getProjection().getVisibleRegion().latLngBounds;
-                updateCoveredAreaBox();
+                Log.i(TAG, "New visible box: " + visibleAreaBox.toString());
+                if (!isVisibleAreaCovered()) {
+                    updateCoveredAreaBox();
+                }
                 clusterManager.onCameraIdle();
             }
         });
@@ -180,15 +185,31 @@ public class MapFragment extends Fragment {
     }
 
     private void updateCoveredAreaBox() {
-        double longitudeLength = visibleAreaBox.northeast.longitude - visibleAreaBox.southwest.longitude;
-        double latitudeLength = visibleAreaBox.northeast.latitude - visibleAreaBox.southwest.latitude;
-        LatLng northeast = new LatLng(visibleAreaBox.northeast.latitude + (latitudeLength * 0.25), visibleAreaBox.northeast.longitude + (longitudeLength * 0.25));
-        LatLng southwest = new LatLng(visibleAreaBox.southwest.latitude - (latitudeLength * 0.25), visibleAreaBox.southwest.longitude - (longitudeLength * 0.25));
+        double longitudeLength = abs(visibleAreaBox.northeast.longitude - visibleAreaBox.southwest.longitude);
+        double latitudeLength = abs(visibleAreaBox.northeast.latitude - visibleAreaBox.southwest.latitude);
+        float extraPercentageBySide = (COVERED_AREA_EXTRA_PERCENTAGE - 1)/2;
+
+        //Reduce percentage if the area exceeds the map
+        if (longitudeLength * COVERED_AREA_EXTRA_PERCENTAGE >= 360) {
+            extraPercentageBySide = (float) 0.25;
+        }
+
+        LatLng northeast = new LatLng(visibleAreaBox.northeast.latitude + (latitudeLength * extraPercentageBySide), visibleAreaBox.northeast.longitude + (longitudeLength * extraPercentageBySide));
+        LatLng southwest = new LatLng(visibleAreaBox.southwest.latitude - (latitudeLength * extraPercentageBySide), visibleAreaBox.southwest.longitude - (longitudeLength * extraPercentageBySide));
+
         coveredAreaBox = new LatLngBounds(southwest, northeast);
-
-        Log.i(TAG, "Cuurent visible box: " + visibleAreaBox.toString());
         Log.i(TAG, "New CAB: " + coveredAreaBox.toString());
+    }
 
+    private boolean isVisibleAreaCovered() {
+        //First time, the cab will be null, so we want to update it
+        if (coveredAreaBox == null) {
+            return false;
+        }
+        if (coveredAreaBox.contains(visibleAreaBox.northeast) && coveredAreaBox.contains(visibleAreaBox.southwest)) {
+            return true;
+        }
+        return false;
     }
 
     private void getLocationPosts() {
