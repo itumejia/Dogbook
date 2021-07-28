@@ -67,8 +67,7 @@ public class MapFragment extends Fragment {
     private MapClusteringRenderer clusterRenderer;
 
     private LatLngBounds coveredAreaBox;
-
-    private Thread updatePostsThread;
+    ParseQuery<Post> fetchPostsQuery;
 
     public MapFragment() {}
 
@@ -109,12 +108,7 @@ public class MapFragment extends Fragment {
                 LatLngBounds visibleAreaBox = map.getProjection().getVisibleRegion().latLngBounds;
                 Log.i(TAG, "New visible box: " + visibleAreaBox.toString());
                 if (!isVisibleAreaCovered(visibleAreaBox)) {
-                    if (updatePostsThread != null && updatePostsThread.isAlive()) {
-                        updatePostsThread.interrupt();
-                    }
-                    updatePostsThread = new Thread(new UpdatePostsRunnable(visibleAreaBox));
-                    updatePostsThread.start();
-
+                    updateCoveredAreaBox(visibleAreaBox);
 
                 }
                 clusterManager.onCameraIdle();
@@ -191,21 +185,6 @@ public class MapFragment extends Fragment {
         map.animateCamera(cameraUpdate);
     }
 
-    public class UpdatePostsRunnable implements Runnable {
-
-        LatLngBounds visibleAreaBox;
-
-        public UpdatePostsRunnable(LatLngBounds visibleAreaBox) {
-            this.visibleAreaBox = visibleAreaBox;
-        }
-
-        @Override
-        public void run() {
-            updateCoveredAreaBox(visibleAreaBox);
-
-        }
-    }
-
     private void updateCoveredAreaBox(LatLngBounds visibleAreaBox) {
         double longitudeLength = abs(visibleAreaBox.northeast.longitude - visibleAreaBox.southwest.longitude);
         double latitudeLength = abs(visibleAreaBox.northeast.latitude - visibleAreaBox.southwest.latitude);
@@ -238,8 +217,12 @@ public class MapFragment extends Fragment {
     }
 
     private void getPostsForCoveredAreaBox() {
-        ParseQuery<Post> query = ParseApplication.getLocationPostWithinBoundsQuery(coveredAreaBox.southwest, coveredAreaBox.northeast);
-        query.findInBackground(new FindCallback<Post>() {
+        if (fetchPostsQuery != null && fetchPostsQuery.isRunning()) {
+            fetchPostsQuery.cancel();
+            Log.i(TAG, "Data fetching cancelled");
+        }
+        fetchPostsQuery = ParseApplication.getLocationPostWithinBoundsQuery(coveredAreaBox.southwest, coveredAreaBox.northeast);
+        fetchPostsQuery.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
