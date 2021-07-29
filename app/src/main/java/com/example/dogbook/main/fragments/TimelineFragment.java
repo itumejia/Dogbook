@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.example.dogbook.common.ParseApplication;
 import com.example.dogbook.main.adapters.PostsAdapter;
 import com.example.dogbook.main.models.Post;
@@ -32,6 +33,7 @@ public class TimelineFragment extends Fragment {
     private RecyclerView rvPosts;
     private RecyclerView.Adapter postsAdapter;
     private List<Post> posts;
+    private PullRefreshLayout ptrContainer;
 
 
     public TimelineFragment() {
@@ -53,9 +55,17 @@ public class TimelineFragment extends Fragment {
     }
 
     private void initView(View view) {
+        ptrContainer = view.findViewById(R.id.ptrContainer);
+        ptrContainer.setRefreshStyle(PullRefreshLayout.STYLE_SMARTISAN);
         rvPosts = view.findViewById(R.id.rvPosts);
         posts = new ArrayList<>();
         postsAdapter = new PostsAdapter(getContext(), posts);
+        ptrContainer.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshPosts();
+            }
+        });
     }
 
     private void setUpRecyclerView() {
@@ -76,10 +86,13 @@ public class TimelineFragment extends Fragment {
                     posts.addAll(objects);
                     postsAdapter.notifyDataSetChanged();
                     rvPosts.smoothScrollToPosition(0);
+                    ptrContainer.setRefreshing(false);
+
                     return;
                 }
                 Log.e(TAG, "Issue finding posts in Parse", e);
                 Toast.makeText(getContext(), "Unable to refresh posts", Toast.LENGTH_SHORT).show();
+                ptrContainer.setRefreshing(false);
             }
         });
     }
