@@ -5,6 +5,7 @@
 1. [Product Spec](#Product-Spec)
 1. [Wireframes](#Wireframes)
 2. [Schema](#Schema)
+3. [FBU App Expectations](#FBU-Expectations-Checklist)
 
 ## Overview
 ### Description
@@ -344,4 +345,30 @@ entity.saveInBackground(e -> {
    * (Delete) Dislike a post
 * Dogs nearby map
     * (Read/GET) Get all posts (maybe only the ones made 24 or less hours ago)
+  
+  
+## FBU Expectations Checklist
+
+- [x] Your app has multiple views.
+    *    The app has login, register, timeline, map and post details screens
+- [x] Your app interacts with a database (e.g. Parse)
+    *    The app uses a Parse database to store users and posts information
+- [x] You can log in/log out of your app as a user
+    *    The user has to login to access the app.
+- [x] You can sign up with a new user profile
+    *    The user is able to create a new account from the app
+- [x] Your app integrates with at least one SDK (e.g. Google Maps SDK, Facebook SDK) or API (that you didn’t learn about in CodePath)
+    *    The app uses the Google Maps SDK
+    *    The use of this SDK is different from what was seen in CodePath lab since the implementation of it is different (permissions are managed in a different way) and extra features are included like markers clustering, markers customization and a camera idle listener to load posts according to what is visible on the map.
+- [x] Your app uses at least one gesture (e.g. double tap to like, e.g. pinch to scale) 
+    *    The ViewPager introduce a gesture of scrolling horizontally to change the tab.
+    *    Gestures of the ViewPager in the map fragement were disabled to let the user control the map freely.
+- [] Your app uses at least one animation (e.g. fade in/out, e.g. animating a view growing and shrinking)
+- [x] Your app incorporates at least external library to add visual polish
+    *    The app incorporates the Github library android-maps-utils to incorporate markers clustering to the map 
+- [x] Your app provides opportunities for you to overcome difficult/ambiguous technical problems (more below)
+    * The features that provided opportunities to overcome difficult problems were
+        * The algorithm that fetches posts for the map only for a specific area depending on what is visible on the map.
+        *    The app has a view pager that allows the user to move between the tabs of the main activity, involvement a special management of the fragments.
+        * The markers clustering of the map.
 
