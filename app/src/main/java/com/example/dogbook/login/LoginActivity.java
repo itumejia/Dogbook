@@ -16,6 +16,7 @@ import com.example.dogbook.signup.SignupActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.royrodriguez.transitionbutton.TransitionButton;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -23,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText etUsername;
     private EditText etPassword;
-    private Button btnLogin;
+    private TransitionButton btnLogin;
     private Button btnSignup;
 
     @Override
@@ -42,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnLogin.startAnimation();
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
                 loginUser(username, password);
@@ -61,9 +63,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e == null) {
-                    goMainActivity();
+                    goMainActivityWithAnimation();
                     return;
                 }
+                btnLogin.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
                 Toast.makeText(LoginActivity.this, "Login was not possible", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Issue with login", e);
             }
@@ -77,8 +80,20 @@ public class LoginActivity extends AppCompatActivity {
         btnSignup = findViewById(R.id.btnSignup);
     }
 
+    private void goMainActivityWithAnimation() {
+        btnLogin.stopAnimation(TransitionButton.StopAnimationStyle.EXPAND, new TransitionButton.OnAnimationStopEndListener() {
+            @Override
+            public void onAnimationStopEnd() {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
     private void goMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
