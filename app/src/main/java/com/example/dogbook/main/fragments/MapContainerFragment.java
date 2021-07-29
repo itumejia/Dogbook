@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 
 import com.example.dogbook.R;
 
+//This class was made because from the map fragment, we can navigate to the Post Details View fragment, and it is not possible to replace the fragment
+//of a ViewPager. That's why we use a nested fragment so that we can change this container when navigating to the Post Details View
 public class MapContainerFragment extends Fragment {
 
     private FragmentManager fragmentManager;
