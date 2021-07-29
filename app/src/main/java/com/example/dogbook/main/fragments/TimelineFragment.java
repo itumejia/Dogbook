@@ -56,6 +56,7 @@ public class TimelineFragment extends Fragment {
 
     private void initView(View view) {
         ptrContainer = view.findViewById(R.id.ptrContainer);
+        ptrContainer.setColor(R.color.main_color);
         ptrContainer.setRefreshStyle(PullRefreshLayout.STYLE_SMARTISAN);
         rvPosts = view.findViewById(R.id.rvPosts);
         posts = new ArrayList<>();

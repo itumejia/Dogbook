@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login.LoginActivity">
+    tools:context=".login.LoginActivity"
+    android:background="@color/main_color">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -206,16 +207,15 @@
 
         </LinearLayout>
 
-        <Button
+        <com.royrodriguez.transitionbutton.TransitionButton
             android:id="@+id/btnSignup"
-            android:layout_marginTop="@dimen/layout_top_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_top_margin"
             android:text="@string/signUp"
-            android:backgroundTint="@color/main_color"
-            android:textColor="@color/black"/>
-
-
+            app:defaultColor="@color/white"
+            app:loaderColor="@color/dark_main_color"
+            android:textColor="@color/dark_main_color" />
 
         <LinearLayout
             android:layout_marginTop="@dimen/login_signup_separation"
@@ -232,9 +232,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/legend_button_separation"
-                android:backgroundTint="@color/main_color"
+                android:backgroundTint="@color/white"
                 android:text="@string/logIn"
-                android:textColor="@color/black"
+                android:textColor="@color/dark_main_color"
                 android:textSize="@dimen/alternative_button_text_size" />
 
         </LinearLayout>

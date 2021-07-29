@@ -19,6 +19,7 @@ import com.example.dogbook.R;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+import com.royrodriguez.transitionbutton.TransitionButton;
 
 import java.util.Date;
 
@@ -35,7 +36,7 @@ public class SignupActivity extends AppCompatActivity {
     private CheckBox cbLookingForPlaymates;
     private EditText etOwnerName;
     private EditText etOwnerContact;
-    private Button btnSignup;
+    private TransitionButton btnSignup;
     private Button btnLogin;
 
     @Override
@@ -46,6 +47,7 @@ public class SignupActivity extends AppCompatActivity {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnSignup.startAnimation();
                 signUp();
             }
         });
@@ -60,6 +62,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        btnSignup = findViewById(R.id.btnSignup);
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
@@ -68,7 +71,6 @@ public class SignupActivity extends AppCompatActivity {
         cbLookingForPlaymates = findViewById(R.id.cbLookingForPlaymates);
         etOwnerName = findViewById(R.id.etOwnerName);
         etOwnerContact = findViewById(R.id.etOwnerContact);
-        btnSignup = findViewById(R.id.btnSignup);
         btnLogin = findViewById(R.id.btnLogin);
     }
 
@@ -76,6 +78,7 @@ public class SignupActivity extends AppCompatActivity {
         //Password confirmation was invalid
         if (!etPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
             Toast.makeText(this, "Password confirmation was invalid", Toast.LENGTH_SHORT).show();
+            btnSignup.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
             return;
         }
         ParseUser user = new ParseUser();
@@ -100,6 +103,7 @@ public class SignupActivity extends AppCompatActivity {
                 }
                 //Sign up did NOT succeed
                 //TODO: Show specific issues to user with different toasts
+                btnSignup.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
                 Toast.makeText(SignupActivity.this, "Signup was not possible", Toast.LENGTH_LONG).show();
                 Log.e(TAG, "Issue with signup", e);
             }
@@ -111,10 +115,16 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void goMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        btnSignup.stopAnimation(TransitionButton.StopAnimationStyle.EXPAND, new TransitionButton.OnAnimationStopEndListener() {
+            @Override
+            public void onAnimationStopEnd() {
+                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void goLoginActivity() {
