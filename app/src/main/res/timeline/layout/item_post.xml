@@ -65,6 +65,71 @@
         android:visibility="gone"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
+    <LinearLayout
+        android:id="@+id/llReactions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivPostPicture"
+        android:layout_marginTop="@dimen/image_reactions_separation"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/ivComment"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="8sp"
+            app:srcCompat="@drawable/ic_outline_mode_comment_24" />
+
+        <TextView
+            android:id="@+id/tvCommentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textSize="12sp"
+            tools:text="125" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/cbLike"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:button="@drawable/selector_hearth"
+            android:checked="false"
+            android:textSize="8sp" />
+
+        <TextView
+            android:id="@+id/tvLikeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textSize="12sp"
+            tools:text="840" />
+
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+
     <View
         android:id="@+id/divider"
         android:layout_marginVertical="@dimen/divider_vertical_margin"
@@ -72,7 +137,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_size"
         android:background="?android:attr/listDivider"
-        android:layout_below="@id/ivPostPicture"/>
+        android:layout_below="@id/llReactions"/>
 
 
 </RelativeLayout>

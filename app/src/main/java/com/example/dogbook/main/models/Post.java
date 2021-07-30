@@ -23,6 +23,10 @@ public class Post extends ParseObject implements ClusterItem {
     public static final String KEY_LOCATION = "location";
     public static final String KEY_AUTHOR = "author";
 
+    private boolean isLiked = false; //Default value: the post has not been liked by the user
+    private int noLikes;
+    private int noComments;
+
     public Post() {}
 
     public String getDescription(){
@@ -52,6 +56,30 @@ public class Post extends ParseObject implements ClusterItem {
     public ParseGeoPoint getLocation() { return getParseGeoPoint(KEY_LOCATION); }
 
     public void setLocation(ParseGeoPoint location) { put(KEY_LOCATION, location);}
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
+    public int getNoLikes() {
+        return noLikes;
+    }
+
+    public void setNoLikes(int noLikes) {
+        this.noLikes = noLikes;
+    }
+
+    public int getNoComments() {
+        return noComments;
+    }
+
+    public void setNoComments(int noComments) {
+        this.noComments = noComments;
+    }
 
     public String getRelativeTime() {
 
