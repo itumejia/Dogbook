@@ -35,7 +35,6 @@ public class TimelineFragment extends Fragment {
     private List<Post> posts;
     private PullRefreshLayout ptrContainer;
 
-
     public TimelineFragment() {
         // Required empty public constructor
     }
@@ -52,6 +51,7 @@ public class TimelineFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         setUpRecyclerView();
+        ParseApplication.functionTry();
     }
 
     private void initView(View view) {
