@@ -1,17 +1,23 @@
 package com.example.dogbook.common;
 
 import android.app.Application;
+import android.util.Log;
 
+import com.example.dogbook.main.models.Like;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.main.models.User;
 import com.google.android.gms.maps.model.LatLng;
+import com.parse.FunctionCallback;
 import com.parse.Parse;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ParseApplication extends Application {
@@ -19,12 +25,14 @@ public class ParseApplication extends Application {
     private static final String applicationId = "T1jE58fMZ8vK3hhqx6unQjQTOqD00iq710HO6a6H";
     private static final String clientKey = "qXL3ridoOP7CzL58qfdcUpngJJECzglK7Ydv4inz";
     private static final String server = "https://parseapi.back4app.com";
+    private static final String TAG = "ParseApplication";
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         ParseObject.registerSubclass(Post.class);
+        ParseObject.registerSubclass(Like.class);
         ParseUser.registerSubclass(User.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
@@ -35,12 +43,19 @@ public class ParseApplication extends Application {
         );
     }
 
-    public static ParseQuery<Post> getLocationPostQuery() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.orderByDescending("createdAt");
-        query.include("author");
-        query.whereExists("location");
-        return query;
+    public static void functionTry() {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        ParseCloud.callFunctionInBackground("getTimeline", params, new FunctionCallback<Object>() {
+            @Override
+            public void done(Object object, ParseException e) {
+                if (e == null) {
+                    Log.i(TAG, "Data fetched");
+                    return;
+                }
+                Log.e(TAG, "Timeline not fetched", e);
+
+            }
+        });
     }
 
     public static ParseQuery<Post> getLocationPostWithinBoundsQuery(LatLng southwest, LatLng northeast) {

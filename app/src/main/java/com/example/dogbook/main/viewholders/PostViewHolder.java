@@ -2,6 +2,7 @@ package com.example.dogbook.main.viewholders;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.parse.ParseFile;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
+    private Context context;
 
     private ImageView ivProfilePicture;
     private ImageView ivPostPicture;
@@ -23,7 +25,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private TextView tvOwner;
     private TextView tvRelativeTime;
     private TextView tvCaption;
-    private Context context;
+    private CheckBox cbLike;
+    private TextView tvLikeCount;
+    private TextView tvCommentCount;
 
     public PostViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
@@ -33,6 +37,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         tvOwner = itemView.findViewById(R.id.tvOwner);
         tvRelativeTime = itemView.findViewById(R.id.tvRelativeTime);
         tvCaption = itemView.findViewById(R.id.tvCaption);
+        cbLike = itemView.findViewById(R.id.cbLike);
+        tvLikeCount = itemView.findViewById(R.id.tvLikeCount);
+        tvCommentCount = itemView.findViewById(R.id.tvCommentCount);
         this.context = context;
     }
 
@@ -52,6 +59,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             ivPostPicture.setVisibility(View.VISIBLE);
             Glide.with(context).load(postPicture.getUrl()).into(ivPostPicture);
         }
+
+        //tvLikeCount.setText(post.getNoLikes());
+        //tvCommentCount.setText(post.getNoComments());
+        //cbLike.setChecked(post.isLiked());
     }
 
     public void recycle() {
@@ -61,5 +72,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         tvCaption.setText("");
         ivPostPicture.setVisibility(View.GONE);
         ivPostPicture.setImageResource(0);
+        tvLikeCount.setText("");
+        tvCommentCount.setText("");
+        cbLike.setChecked(false);
     }
 }

@@ -14,4 +14,5 @@
     <dimen name="divider_vertical_margin">20dp</dimen>
     <dimen name="divider_horizontal_margin">10dp</dimen>
     <dimen name="divider_size">1dp</dimen>
+    <dimen name="image_reactions_separation">10dp</dimen>
 </resources>
