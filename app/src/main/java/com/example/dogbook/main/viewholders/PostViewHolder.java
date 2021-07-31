@@ -60,9 +60,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             Glide.with(context).load(postPicture.getUrl()).into(ivPostPicture);
         }
 
-        //tvLikeCount.setText(post.getNoLikes());
-        //tvCommentCount.setText(post.getNoComments());
-        //cbLike.setChecked(post.isLiked());
+        tvLikeCount.setText(String.valueOf(post.getNoLikes()));
+        tvCommentCount.setText(String.valueOf(post.getNoComments()));
+        cbLike.setChecked(post.isLiked());
     }
 
     public void recycle() {
