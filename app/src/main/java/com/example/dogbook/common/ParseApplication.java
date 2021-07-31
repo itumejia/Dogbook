@@ -43,21 +43,6 @@ public class ParseApplication extends Application {
         );
     }
 
-    public static void functionTry() {
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        ParseCloud.callFunctionInBackground("getTimeline", params, new FunctionCallback<Object>() {
-            @Override
-            public void done(Object object, ParseException e) {
-                if (e == null) {
-                    Log.i(TAG, "Data fetched");
-                    return;
-                }
-                Log.e(TAG, "Timeline not fetched", e);
-
-            }
-        });
-    }
-
     public static ParseQuery<Post> getLocationPostWithinBoundsQuery(LatLng southwest, LatLng northeast) {
         ParseQuery<Post> mainQuery = ParseQuery.getQuery(Post.class);
         //Parse whereWithinGeoBox queries have conflict when the given box rounds the Earth.

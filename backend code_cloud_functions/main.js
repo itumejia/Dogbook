@@ -6,44 +6,47 @@ const CLASS_LIKE = "Like";
 const CLASS_COMMENT = "Comment";
 const KEY_AUTHOR = "author";
 const KEY_POST = "post";
+const KEY_CREATED_AT = "createdAt";
 
 //Retrieve 20 posts with all the info needed to populate the timeline
 Parse.Cloud.define("getTimeline", async(request) => {
     let query = new Parse.Query(CLASS_POST);
     query.limit(20);
-    query.descending()
+    query.descending(KEY_CREATED_AT);
+    query.include(KEY_AUTHOR);
 
     const posts = await query.find();
-    let timeline = []
+    let reactions = []
 
     for (let i = 0; i < posts.length; i++) {
-        let object = posts[i];
+        let object = {};
         //Add extra useful info
-        object["isLiked"] = isPostLiked(object.id, request.user.id);
-        object["likesCount"] = getLikesCount(object.id);
-        object["commentsCount"] = getCommentCount(object.id);
-        timeline.push(object);
+        object["isLiked"] = await isPostLiked(posts[i], request.user);
+        object["likesCount"] = await getLikesCount(posts[i]);
+        object["commentsCount"] = await getCommentCount(posts[i]);
+        reactions.push(object);
     }
 
-    return timeline;
+    return {posts, reactions};
 });
 
-function isPostLiked(postId, userId) {
+async function isPostLiked(post, user) {
     let query = new Parse.Query(CLASS_LIKE);
-    query.equalTo(KEY_AUTHOR, userId);
-    query.equalTo(KEY_POST, postId);
-    let count = query.count();
+    query.equalTo(KEY_AUTHOR, user);
+    query.equalTo(KEY_POST, post);
+    let count = await query.count();
     return (count == 0 ? false : true);
 }
 
-function getLikesCount(postId) {
+async function getLikesCount(post) {
     let query = new Parse.Query(CLASS_LIKE);
-    query.equalTo(KEY_POST, postId);
-    return query.count();
+    query.equalTo(KEY_POST, post);
+    let results = await query.find();
+    return await query.count();
 }
 
-function getCommentCount(postId) {
+async function getCommentCount(post) {
     let query = new Parse.Query(CLASS_COMMENT);
-    query.equalTo(KEY_POST, postId);
-    return query.count();
+    query.equalTo(KEY_POST, post);
+    return await query.count();
 }

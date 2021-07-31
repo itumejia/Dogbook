@@ -20,10 +20,14 @@ import com.example.dogbook.main.adapters.PostsAdapter;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class TimelineFragment extends Fragment {
@@ -51,7 +55,6 @@ public class TimelineFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         setUpRecyclerView();
-        ParseApplication.functionTry();
     }
 
     private void initView(View view) {
@@ -78,23 +81,44 @@ public class TimelineFragment extends Fragment {
 
 
     public void refreshPosts() {
-        ParseQuery<Post> query = ParseApplication.getAllPostsQuery();
-        query.findInBackground(new FindCallback<Post>() {
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        ParseCloud.callFunctionInBackground("getTimeline", params, new FunctionCallback<Object>() {
             @Override
-            public void done(List<Post> objects, ParseException e) {
+            public void done(Object object, ParseException e) {
                 if (e == null) {
+                    HashMap results = (HashMap) object;
                     posts.clear();
-                    posts.addAll(objects);
+                    posts.addAll((Collection<? extends Post>) results.get("posts"));
+                    posts = Post.addReactions(posts, (List<HashMap>) results.get("reactions"));
                     postsAdapter.notifyDataSetChanged();
                     rvPosts.smoothScrollToPosition(0);
                     ptrContainer.setRefreshing(false);
 
                     return;
                 }
-                Log.e(TAG, "Issue finding posts in Parse", e);
-                Toast.makeText(getContext(), "Unable to refresh posts", Toast.LENGTH_SHORT).show();
-                ptrContainer.setRefreshing(false);
+                Log.e(TAG, "Timeline not fetched", e);
+
             }
         });
+
+//        ParseQuery<Post> query = ParseApplication.getAllPostsQuery();
+//        query.findInBackground(new FindCallback<Post>() {
+//            @Override
+//            public void done(List<Post> objects, ParseException e) {
+//                if (e == null) {
+//                    posts.clear();
+//                    posts.addAll(objects);
+//                    postsAdapter.notifyDataSetChanged();
+//                    rvPosts.smoothScrollToPosition(0);
+//                    ptrContainer.setRefreshing(false);
+//
+//                    return;
+//                }
+//                Log.e(TAG, "Issue finding posts in Parse", e);
+//                Toast.makeText(getContext(), "Unable to refresh posts", Toast.LENGTH_SHORT).show();
+//                ptrContainer.setRefreshing(false);
+//            }
+//        });
     }
 }

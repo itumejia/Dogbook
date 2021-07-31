@@ -13,7 +13,11 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcel;
 
+import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @Parcel(analyze = Post.class)
 @ParseClassName("Post")
@@ -23,11 +27,26 @@ public class Post extends ParseObject implements ClusterItem {
     public static final String KEY_LOCATION = "location";
     public static final String KEY_AUTHOR = "author";
 
+    public static final String KEY_REACTIONS_IS_LIKED = "isLiked";
+    public static final String KEY_REACTIONS_LIKES_COUNT = "likesCount";
+    public static final String KEY_REACTIONS_COMMENTS_COUNT = "commentsCount";
+
     private boolean isLiked = false; //Default value: the post has not been liked by the user
     private int noLikes;
     private int noComments;
 
     public Post() {}
+
+    //Add reactions information to the posts
+    public static List<Post> addReactions(List<Post> posts, List<HashMap> reactions) {
+        for (int i = 0; i < posts.size(); i++) {
+            posts.get(i).setLiked((Boolean) reactions.get(i).get(KEY_REACTIONS_IS_LIKED));
+            posts.get(i).setNoLikes((int) reactions.get(i).get(KEY_REACTIONS_LIKES_COUNT));
+            posts.get(i).setNoComments((int) reactions.get(i).get(KEY_REACTIONS_COMMENTS_COUNT));
+        }
+
+        return posts;
+    }
 
     public String getDescription(){
         return getString(KEY_DESCRIPTION);
