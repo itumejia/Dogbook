@@ -6,24 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.example.dogbook.compose.ComposeActivity;
 import com.example.dogbook.login.LoginActivity;
 import com.example.dogbook.main.adapters.ViewPagerAdapter;
-import com.example.dogbook.main.fragments.MapContainerFragment;
-import com.example.dogbook.main.fragments.MapFragment;
 import com.example.dogbook.main.fragments.TimelineFragment;
 import com.example.dogbook.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

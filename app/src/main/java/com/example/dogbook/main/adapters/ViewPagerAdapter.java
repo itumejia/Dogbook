@@ -3,14 +3,10 @@ package com.example.dogbook.main.adapters;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.dogbook.main.fragments.MapContainerFragment;
-import com.example.dogbook.main.fragments.MapFragment;
+import com.example.dogbook.main.fragmentContainers.MapContainerFragment;
+import com.example.dogbook.main.fragmentContainers.TimelineContainerFragment;
 import com.example.dogbook.main.fragments.TimelineFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
@@ -28,7 +24,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
         switch (position) {
             case 0:
             default:
-                return new TimelineFragment();
+                return new TimelineContainerFragment();
             case 1:
                 return new MapContainerFragment();
         }
