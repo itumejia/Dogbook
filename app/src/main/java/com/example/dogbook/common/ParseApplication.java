@@ -85,6 +85,14 @@ public class ParseApplication extends Application {
         return mainQuery;
     }
 
+    public static ParseQuery<Like> getLikeFromPostByUser(ParseUser author, Post post) {
+        ParseQuery<Like> query = ParseQuery.getQuery(Like.class);
+        query.whereEqualTo("author", author);
+        query.whereEqualTo("post", post);
+        return query;
+
+    }
+
     public static ParseQuery<Post> getAllPostsQuery() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.setLimit(20);

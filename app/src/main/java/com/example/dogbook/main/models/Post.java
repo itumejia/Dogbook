@@ -1,15 +1,26 @@
 package com.example.dogbook.main.models;
 
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.dogbook.common.ParseApplication;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
+import com.parse.DeleteCallback;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcel;
 
@@ -20,6 +31,9 @@ import java.util.List;
 @Parcel(analyze = Post.class)
 @ParseClassName("Post")
 public class Post extends ParseObject implements ClusterItem {
+
+    private static final String TAG = "PostClass";
+
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_PHOTO = "photo";
     public static final String KEY_LOCATION = "location";
@@ -78,24 +92,34 @@ public class Post extends ParseObject implements ClusterItem {
         return isLikedByLoggedUser;
     }
 
-    public void setLikedByLoggedUser(boolean liked) {
-        isLikedByLoggedUser = liked;
-    }
-
     public int getLikesCount() {
         return likesCount;
-    }
-
-    public void setLikesCount(int likesCount) {
-        this.likesCount = likesCount;
     }
 
     public int getCommentsCount() {
         return commentsCount;
     }
 
+    public void setLikedByLoggedUser(boolean likedByLoggedUser) {
+        isLikedByLoggedUser = likedByLoggedUser;
+    }
+
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
+    }
+
     public void setCommentsCount(int commentsCount) {
         this.commentsCount = commentsCount;
+    }
+
+    private void likedLocally() {
+        isLikedByLoggedUser = true;
+        likesCount +=1;
+    }
+
+    private void dislikedLocally() {
+        isLikedByLoggedUser = false;
+        likesCount -=1;
     }
 
     public String getRelativeTime() {
@@ -144,5 +168,74 @@ public class Post extends ParseObject implements ClusterItem {
     @Override
     public String getSnippet() {
         return this.getDescription();
+    }
+
+    public void like(Context context, PostReactionCallback postReactionCallback) {
+        this.likedLocally();
+        postReactionCallback.onOptimisticUpdate(this);
+
+        //Apply changes on database
+        Like like = new Like();
+        like.setAuthor(ParseUser.getCurrentUser());
+        like.setPost(this);
+        like.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.i(TAG, "Like saved successfully");
+                    postReactionCallback.onSuccess(Post.this);
+                    return;
+                }
+                Log.e(TAG, "Issue saving Like", e);
+                Toast.makeText(context, "Liking was not possible", Toast.LENGTH_SHORT).show();
+                Post.this.dislikedLocally();
+                postReactionCallback.onFailure(Post.this);
+            }
+        });
+
+    }
+
+    public void dislike(Context context, PostReactionCallback postReactionCallback) {
+        this.dislikedLocally();
+        postReactionCallback.onOptimisticUpdate(this);
+        //Apply changes on database
+        ParseQuery<Like> query = ParseApplication.getLikeFromPostByUser(ParseUser.getCurrentUser(), this);
+        query.getFirstInBackground(new GetCallback<Like>() {
+            @Override
+            public void done(Like object, ParseException e) {
+                if (e == null) {
+                    object.deleteInBackground(new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.i(TAG, "Dislike saved successfully");
+                                postReactionCallback.onSuccess(Post.this);
+                                return;
+
+                            }
+                            //Like was not deleted
+                            Log.e(TAG, "Issue saving dislike", e);
+                            Toast.makeText(context, "Disliking was not possible", Toast.LENGTH_SHORT).show();
+                            Post.this.likedLocally();
+                            postReactionCallback.onFailure(Post.this);
+                        }
+                    });
+                } else {
+                    //Like was not found
+                    Log.e(TAG, "Issue saving dislike", e);
+                    Toast.makeText(context, "Disliking was not possible", Toast.LENGTH_SHORT).show();
+                    Post.this.likedLocally();
+                    postReactionCallback.onFailure(Post.this);
+                }
+            }
+        });
+
+
+    }
+
+    public interface PostReactionCallback {
+        void onOptimisticUpdate(Post post);
+        void onSuccess(Post post);
+        void onFailure(Post post);
     }
 }
