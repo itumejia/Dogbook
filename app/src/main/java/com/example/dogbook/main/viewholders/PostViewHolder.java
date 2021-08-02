@@ -1,8 +1,6 @@
 package com.example.dogbook.main.viewholders;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -13,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.dogbook.main.adapters.PostsAdapter;
-import com.example.dogbook.main.fragments.PostDetailsFragment;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
 import com.example.dogbook.main.models.User;
@@ -67,9 +64,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
             Glide.with(context).load(postPicture.getUrl()).into(ivPostPicture);
         }
 
-        tvLikeCount.setText(String.valueOf(post.getNoLikes()));
-        tvCommentCount.setText(String.valueOf(post.getNoComments()));
-        cbLike.setChecked(post.isLiked());
+        tvLikeCount.setText(String.valueOf(post.getLikesCount()));
+        tvCommentCount.setText(String.valueOf(post.getCommentsCount()));
+        cbLike.setChecked(post.isLikedByLoggedUser());
     }
 
     public void recycle() {
