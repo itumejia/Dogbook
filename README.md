@@ -371,9 +371,14 @@ entity.saveInBackground(e -> {
 - [x] Your app uses at least one gesture (e.g. double tap to like, e.g. pinch to scale) 
     *    The ViewPager introduce a gesture of scrolling horizontally to change the tab.
     *    Gestures of the ViewPager in the map fragement were disabled to let the user control the map freely.
-- [] Your app uses at least one animation (e.g. fade in/out, e.g. animating a view growing and shrinking)
+    *    The user can pull down in the main feed to refresh.
+- [x] Your app uses at least one animation (e.g. fade in/out, e.g. animating a view growing and shrinking)
+    *    The pull to refresh gesture comes with an animation while the posts are being fetched.
+    *    There is a transition animation when going from the login/register screen to the main activity.
 - [x] Your app incorporates at least external library to add visual polish
     *    The app incorporates the Github library android-maps-utils to incorporate markers clustering to the map 
+    *    The app incorporates the Github library android-PullRefreshLayout for the pull to refresg gesture/animation
+    *    The app incorporates the Github library transition-button-android for the animation from login/register to the main activity
 - [x] Your app provides opportunities for you to overcome difficult/ambiguous technical problems (more below)
     * The features that provided opportunities to overcome difficult problems were
         * The algorithm that fetches posts for the map only for a specific area depending on what is visible on the map.
