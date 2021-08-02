@@ -1,11 +1,14 @@
 package com.example.dogbook.main.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dogbook.main.models.Post;
@@ -18,6 +21,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     private List<Post> posts;
     private Context context;
+    public static OnItemClickListener clickListener;
 
     public PostsAdapter(Context context, List<Post> posts) {
         this.posts = posts;
@@ -45,5 +49,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostViewHolder> {
     public void onViewRecycled(@NonNull PostViewHolder holder) {
         super.onViewRecycled(holder);
         holder.recycle();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position, View v);
     }
 }

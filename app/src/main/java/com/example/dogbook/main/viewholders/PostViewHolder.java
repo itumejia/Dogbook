@@ -1,6 +1,8 @@
 package com.example.dogbook.main.viewholders;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -10,12 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.dogbook.main.adapters.PostsAdapter;
+import com.example.dogbook.main.fragments.PostDetailsFragment;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
 import com.example.dogbook.main.models.User;
 import com.parse.ParseFile;
 
-public class PostViewHolder extends RecyclerView.ViewHolder {
+public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private Context context;
 
@@ -41,6 +45,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         tvLikeCount = itemView.findViewById(R.id.tvLikeCount);
         tvCommentCount = itemView.findViewById(R.id.tvCommentCount);
         this.context = context;
+
+        itemView.setOnClickListener(this);
+        cbLike.setOnClickListener(this);
     }
 
     public void bind(Post post) {
@@ -75,5 +82,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         tvLikeCount.setText("");
         tvCommentCount.setText("");
         cbLike.setChecked(false);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (PostsAdapter.clickListener != null) {
+            PostsAdapter.clickListener.onItemClick(getAdapterPosition(),v);
+        }
     }
 }

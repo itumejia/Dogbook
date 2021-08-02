@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,8 +35,9 @@ public class TimelineFragment extends Fragment {
 
     private static final String TAG = "TimelineFragment";
 
+    private FragmentManager fragmentManager;
     private RecyclerView rvPosts;
-    private RecyclerView.Adapter postsAdapter;
+    private PostsAdapter postsAdapter;
     private List<Post> posts;
     private PullRefreshLayout ptrContainer;
 
@@ -58,6 +60,7 @@ public class TimelineFragment extends Fragment {
     }
 
     private void initView(View view) {
+        fragmentManager = getParentFragmentManager();
         ptrContainer = view.findViewById(R.id.ptrContainer);
         ptrContainer.setColor(R.color.main_color);
         ptrContainer.setRefreshStyle(PullRefreshLayout.STYLE_SMARTISAN);
@@ -73,6 +76,16 @@ public class TimelineFragment extends Fragment {
     }
 
     private void setUpRecyclerView() {
+        postsAdapter.setOnItemClickListener(new PostsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                PostDetailsFragment fragment = new PostDetailsFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.timelineFragmentContainer, PostDetailsFragment.newInstance(posts.get(position)))
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
         rvPosts.setAdapter(postsAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(layoutManager);
@@ -101,24 +114,5 @@ public class TimelineFragment extends Fragment {
 
             }
         });
-
-//        ParseQuery<Post> query = ParseApplication.getAllPostsQuery();
-//        query.findInBackground(new FindCallback<Post>() {
-//            @Override
-//            public void done(List<Post> objects, ParseException e) {
-//                if (e == null) {
-//                    posts.clear();
-//                    posts.addAll(objects);
-//                    postsAdapter.notifyDataSetChanged();
-//                    rvPosts.smoothScrollToPosition(0);
-//                    ptrContainer.setRefreshing(false);
-//
-//                    return;
-//                }
-//                Log.e(TAG, "Issue finding posts in Parse", e);
-//                Toast.makeText(getContext(), "Unable to refresh posts", Toast.LENGTH_SHORT).show();
-//                ptrContainer.setRefreshing(false);
-//            }
-//        });
     }
 }
