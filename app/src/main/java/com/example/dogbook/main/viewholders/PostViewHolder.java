@@ -83,6 +83,49 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     @Override
     public void onClick(View v) {
+        int adapterPosition = getAdapterPosition();
+
+        //Liking action
+        if (v == cbLike && cbLike.isChecked()){
+            PostsAdapter.posts.get(adapterPosition).like(context, new Post.PostReactionCallback() {
+                @Override
+                public void onOptimisticUpdate(Post post) {
+                    tvLikeCount.setText(String.valueOf(post.getLikesCount()));
+                }
+
+                @Override
+                public void onSuccess(Post post) {}
+
+                @Override
+                public void onFailure(Post post) {
+                    tvLikeCount.setText(String.valueOf(post.getLikesCount()));
+                    cbLike.setChecked(false);
+                }
+            });
+
+            return;
+        }
+
+        //Disliking action
+        if (v ==cbLike && !cbLike.isChecked()){
+            PostsAdapter.posts.get(adapterPosition).dislike(context, new Post.PostReactionCallback() {
+                @Override
+                public void onOptimisticUpdate(Post post) {
+                    tvLikeCount.setText(String.valueOf(post.getLikesCount()));
+                }
+
+                @Override
+                public void onSuccess(Post post) {}
+
+                @Override
+                public void onFailure(Post post) {
+                    tvLikeCount.setText(String.valueOf(post.getLikesCount()));
+                    cbLike.setChecked(true);
+                }
+            });
+            return;
+        }
+
         if (PostsAdapter.clickListener != null) {
             PostsAdapter.clickListener.onItemClick(getAdapterPosition(),v);
         }

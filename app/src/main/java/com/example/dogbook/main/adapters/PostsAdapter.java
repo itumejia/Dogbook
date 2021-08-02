@@ -19,7 +19,7 @@ import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
-    private List<Post> posts;
+    public static List<Post> posts;
     private Context context;
     public static OnItemClickListener clickListener;
 
