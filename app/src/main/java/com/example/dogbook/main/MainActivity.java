@@ -134,4 +134,20 @@ public class MainActivity extends AppCompatActivity {
         timelineFragment.refreshPosts();
         pagerAdapter.notifyItemChanged(ViewPagerAdapter.TIMELINE_PAGE);
     }
+
+    @Override
+    public void onBackPressed() {
+        //As there are nested fragments on multiple fragments in the ViewPager,
+        //onBackPressed needs to be overridden in order to "go back" depending on the fragment that the user is.
+        for (Fragment fragment : fragmentManager.getFragments()) {
+            if (fragment.isVisible()) {
+                FragmentManager childFragmentManager = fragment.getChildFragmentManager();
+                if (childFragmentManager.getBackStackEntryCount() > 0){
+                    childFragmentManager.popBackStack();
+                    return;
+                }
+            }
+        }
+        super.onBackPressed();
+    }
 }
