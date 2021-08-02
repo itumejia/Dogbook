@@ -9,7 +9,7 @@
 
 ## Overview
 ### Description
-This is a social network for dogs. In this app dogs owners will be able to create user profiles their dogs. In their profile they will be able to update photos of their dogs and everything they do. Also, each profile will have useful information for other dogs owners, like the breed, age, if the dog is looking for friends and contact information of the owner. This way, dogs will be able to connect with each others (as well as their owners).
+This is a social network for dogs. In this app dogs owners will be able to create user profiles their dogs. In their profile they will be able to update photos of their dogs and everything they do. Also, each profile will have useful information for other dogs owners, like the breed, age, if the dog is looking for friends and contact information of the owner. This way, dogs will be able to connect with each others (as well as their owners). It also offers a nice way to connect with other people, the _Dogs Nearby Map_, which will have markers of posts that have a location attached, so that the users can find other users that are geographically close.
 
 ### App Evaluation
 [Evaluation of your app across the following attributes]
@@ -30,49 +30,55 @@ This is a social network for dogs. In this app dogs owners will be able to creat
 2. Login using username and password
 3. See a timeline feed with posts of other dogs
 4. See a detail screen of a post when it is clicked.
-5. See a detail screen of a user (dog profile) when the username is clicked in a post  
-12. A map with _Dogs nearby_
-13. Pinch to scale a photo in timeline
-14. User can compose a new post
+5. A map with _Dogs nearby_
+6. User can compose a new post
+7. A ViewPager in the main activity to change the tabs by swiping horizontally
+8. Pull to refresh gesture/animation
+9. Animation when going from Login/Register to the main activity
+10. The posts in the map will be fetched from the database according to the currently visible map´s area
 
 **Optional Nice-to-have Stories**
 
-6. Like posts
-7. Comment on posts
-8. Follow other accounts
-9. Specific timeline feed only for followed accounts
-10. Login and registerusing Facebook SDK
-11. Share posts to Facebook with SDK 
-15. DMs functionality
-16. Improve horizontal orientation layout
-17. Infinite scrolling
+11. See a user detail screen of the curren user
+12. See a detail screen of a user (dog profile) when the username is clicked in a post  
+13. Like posts
+14. Comment on posts
+15. Load comments on the Post details view
+16. Follow other accounts
+17. Specific timeline feed only for followed accounts
+18. Login and registerusing Facebook SDK
+19. Share posts to Facebook with SDK
+20. Pinch to scale a photo in timeline 
+21. DMs functionality
+22. Improve horizontal orientation layout
+23. Infinite scrolling
+24. The map will cluster the markers when zooming out
 
 ### 2. Screen Archetypes
 
-* Welcome Screen (select to login or register)
 * Login screen
-   * 2. Login using username and password
-   * 10. Login and register using Facebook SDK
+   * Login using username and password
+   * Login and register using Facebook SDK
 * Register Screen
-   * 1. Set up a new account dedicated to a dog.
-   * 10. Login and register using Facebook SDK
+   * Set up a new account dedicated to a dog.
+   * Login and register using Facebook SDK
 * Main feed
-   * 3. See a timeline feed with posts of other dogs
-   * 6. Like posts
-   * 13. Pinch to scale a photo in timeline
+   * See a timeline feed with posts of other dogs
+   * Like posts
+   * Pinch to scale a photo in timeline
 * Profile Details 
-   * 5. See a detail screen of a user (dog profile) when the username is clicked in a post
-   * 8. Follow other accounts
+   * See a detail screen of a user (dog profile) when the username is clicked in a post
+   * Follow other accounts
 * Post Details 
-   * 4. See a detail screen of a post when it is clicked.
-   * 6. Like posts
-   * 7. Comment on posts
-   * 11. Share posts to Facebook with SDK 
+   * See a detail screen of a post when it is clicked.
+   * Like posts
+   * Comment on posts
+   * Share posts to Facebook with SDK 
 * Map of Dogs Nearby
-   * 12. A map with _Dogs nearby_
+   * A map with _Dogs nearby_
 
 * Only followed users feed (Optional)
-   * 9. Specific timeline feed only for followed accounts
+   * Specific timeline feed only for followed accounts
 
 
 
@@ -83,7 +89,7 @@ This is a social network for dogs. In this app dogs owners will be able to creat
 * Main feed
 * Only followed users feed (Optional)
 * Dogs Nearby Map
-* My profile
+* My profile (Optional)
 
 **Flow Navigation** (Screen to Screen)
 
@@ -97,6 +103,8 @@ This is a social network for dogs. In this app dogs owners will be able to creat
 * Main Feed
    * Profile Details
    * Post Details
+* Dogs Nearby Map
+  * Post Details
 * Only followed users feed (Optional)
    * Profile Details
    * Post Details
