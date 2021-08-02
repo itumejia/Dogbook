@@ -13,8 +13,6 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcel;
 
-import java.security.PublicKey;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,18 +29,18 @@ public class Post extends ParseObject implements ClusterItem {
     public static final String KEY_REACTIONS_LIKES_COUNT = "likesCount";
     public static final String KEY_REACTIONS_COMMENTS_COUNT = "commentsCount";
 
-    private boolean isLiked = false; //Default value: the post has not been liked by the user
-    private int noLikes;
-    private int noComments;
+    private boolean isLikedByLoggedUser = false; //Default value: the post has not been liked by the user
+    private int likesCount;
+    private int commentsCount;
 
     public Post() {}
 
     //Add reactions information to the posts
     public static List<Post> addReactions(List<Post> posts, List<HashMap> reactions) {
         for (int i = 0; i < posts.size(); i++) {
-            posts.get(i).setLiked((Boolean) reactions.get(i).get(KEY_REACTIONS_IS_LIKED));
-            posts.get(i).setNoLikes((int) reactions.get(i).get(KEY_REACTIONS_LIKES_COUNT));
-            posts.get(i).setNoComments((int) reactions.get(i).get(KEY_REACTIONS_COMMENTS_COUNT));
+            posts.get(i).setLikedByLoggedUser((Boolean) reactions.get(i).get(KEY_REACTIONS_IS_LIKED));
+            posts.get(i).setLikesCount((int) reactions.get(i).get(KEY_REACTIONS_LIKES_COUNT));
+            posts.get(i).setCommentsCount((int) reactions.get(i).get(KEY_REACTIONS_COMMENTS_COUNT));
         }
 
         return posts;
@@ -76,28 +74,28 @@ public class Post extends ParseObject implements ClusterItem {
 
     public void setLocation(ParseGeoPoint location) { put(KEY_LOCATION, location);}
 
-    public boolean isLiked() {
-        return isLiked;
+    public boolean isLikedByLoggedUser() {
+        return isLikedByLoggedUser;
     }
 
-    public void setLiked(boolean liked) {
-        isLiked = liked;
+    public void setLikedByLoggedUser(boolean liked) {
+        isLikedByLoggedUser = liked;
     }
 
-    public int getNoLikes() {
-        return noLikes;
+    public int getLikesCount() {
+        return likesCount;
     }
 
-    public void setNoLikes(int noLikes) {
-        this.noLikes = noLikes;
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
     }
 
-    public int getNoComments() {
-        return noComments;
+    public int getCommentsCount() {
+        return commentsCount;
     }
 
-    public void setNoComments(int noComments) {
-        this.noComments = noComments;
+    public void setCommentsCount(int commentsCount) {
+        this.commentsCount = commentsCount;
     }
 
     public String getRelativeTime() {

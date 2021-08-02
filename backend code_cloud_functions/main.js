@@ -35,7 +35,7 @@ async function isPostLiked(post, user) {
     query.equalTo(KEY_AUTHOR, user);
     query.equalTo(KEY_POST, post);
     let count = await query.count();
-    return (count == 0 ? false : true);
+    return count > 0;
 }
 
 async function getLikesCount(post) {
