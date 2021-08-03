@@ -2,7 +2,6 @@ package com.example.dogbook.main.viewholders;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.dogbook.main.PostReactions;
 import com.example.dogbook.main.adapters.PostDetailsAdapter;
 import com.example.dogbook.main.adapters.PostsAdapter;
 import com.example.dogbook.main.models.Post;
@@ -70,7 +70,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
         tvLikeCount.setText(String.valueOf(post.getLikesCount()));
         tvCommentCount.setText(String.valueOf(post.getCommentsCount()));
-        cbLike.setChecked(post.isLikedByLoggedUser());
+        cbLike.setChecked(post.isLikedByLoggedInUser());
     }
 
     public void recycle() {
@@ -99,7 +99,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
         //Liking action
         if (v == cbLike && cbLike.isChecked()){
-            post.like(context, new Post.PostReactionCallback() {
+            PostReactions.like(post, context, new PostReactions.PostReactionCallback() {
                 @Override
                 public void onOptimisticUpdate(Post post) {
                     tvLikeCount.setText(String.valueOf(post.getLikesCount()));
@@ -120,7 +120,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
         //Disliking action
         if (v ==cbLike && !cbLike.isChecked()){
-            post.dislike(context, new Post.PostReactionCallback() {
+            PostReactions.dislike(post, context, new PostReactions.PostReactionCallback() {
                 @Override
                 public void onOptimisticUpdate(Post post) {
                     tvLikeCount.setText(String.valueOf(post.getLikesCount()));
