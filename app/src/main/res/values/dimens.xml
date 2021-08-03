@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="comment_profile_picture">50dp</dimen>
+    <dimen name="comment_username_top_margin">15dp</dimen>
+    <dimen name="username_comment_separation">5dp</dimen>
+    <dimen name="comment_vertical_margin">5dp</dimen>
+</resources>

@@ -2,6 +2,7 @@ package com.example.dogbook.main.viewholders;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.dogbook.main.adapters.PostDetailsAdapter;
 import com.example.dogbook.main.adapters.PostsAdapter;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
@@ -19,6 +21,7 @@ import com.parse.ParseFile;
 public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private Context context;
+    private RecyclerView.Adapter adapter;
 
     private ImageView ivProfilePicture;
     private ImageView ivPostPicture;
@@ -30,7 +33,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     private TextView tvLikeCount;
     private TextView tvCommentCount;
 
-    public PostViewHolder(@NonNull View itemView, Context context) {
+    public PostViewHolder(@NonNull View itemView, Context context, RecyclerView.Adapter adapter) {
         super(itemView);
         ivProfilePicture = itemView.findViewById(R.id.ivProfilePicture);
         ivPostPicture = itemView.findViewById(R.id.ivPostPicture);
@@ -42,6 +45,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         tvLikeCount = itemView.findViewById(R.id.tvLikeCount);
         tvCommentCount = itemView.findViewById(R.id.tvCommentCount);
         this.context = context;
+        this.adapter = adapter;
 
         itemView.setOnClickListener(this);
         cbLike.setOnClickListener(this);
@@ -84,10 +88,18 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     @Override
     public void onClick(View v) {
         int adapterPosition = getAdapterPosition();
+        Post post;
+
+        //Get the post depending if the ViewHolder is in a PostsAdapter or in a PostDetailsAdapter
+        if (adapter instanceof PostsAdapter) {
+            post = ((PostsAdapter) adapter).posts.get(adapterPosition);
+        } else {
+            post = ((PostDetailsAdapter) adapter).post;
+        }
 
         //Liking action
         if (v == cbLike && cbLike.isChecked()){
-            PostsAdapter.posts.get(adapterPosition).like(context, new Post.PostReactionCallback() {
+            post.like(context, new Post.PostReactionCallback() {
                 @Override
                 public void onOptimisticUpdate(Post post) {
                     tvLikeCount.setText(String.valueOf(post.getLikesCount()));
@@ -108,7 +120,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
         //Disliking action
         if (v ==cbLike && !cbLike.isChecked()){
-            PostsAdapter.posts.get(adapterPosition).dislike(context, new Post.PostReactionCallback() {
+            post.dislike(context, new Post.PostReactionCallback() {
                 @Override
                 public void onOptimisticUpdate(Post post) {
                     tvLikeCount.setText(String.valueOf(post.getLikesCount()));
@@ -126,8 +138,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
             return;
         }
 
-        if (PostsAdapter.clickListener != null) {
-            PostsAdapter.clickListener.onItemClick(getAdapterPosition(),v);
+
+        //Add click listener to the entire item only if it is in the Posts Adapter
+        if (adapter instanceof PostsAdapter && ((PostsAdapter) adapter).clickListener != null) {
+            ((PostsAdapter) adapter).clickListener.onItemClick(getAdapterPosition(),v);
         }
     }
 }
