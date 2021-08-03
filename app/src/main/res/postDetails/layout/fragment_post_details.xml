@@ -1,143 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    xmlns:xlmns="http://schemas.android.com/apk/res-auto"
+    tools:context=".main.fragments.TimelineFragment">
 
-    <ImageView
-        android:id="@+id/ivProfilePicture"
-        android:layout_width="@dimen/profile_picture_dimensions"
-        android:layout_height="@dimen/profile_picture_dimensions"
-        android:layout_marginStart="@dimen/item_horizontal_margin"
-        android:layout_marginTop="@dimen/item_top_margin"
-        app:srcCompat="@drawable/dog_icon" />
-
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/profile_picture_username_separation"
-        android:layout_marginTop="@dimen/username_top_margin"
-        android:layout_toEndOf="@+id/ivProfilePicture"
-        android:textColor="@color/black"
-        android:textSize="@dimen/username_text_size"
-        android:textStyle="bold"
-        tools:text="Cookie" />
-
-    <TextView
-        android:id="@+id/tvRelativeTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="an hour ago"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/username_top_margin"
-        android:layout_marginEnd="@dimen/item_horizontal_margin"
-        />
-
-
-    <TextView
-        android:id="@+id/tvOwner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="@dimen/profile_picture_username_separation"
-        android:layout_marginTop="@dimen/username_owner_separation"
-        android:layout_toEndOf="@+id/ivProfilePicture"
-        tools:text="from Sofia Mena" />
-
-    <TextView
-        android:id="@+id/tvCaption"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPostDetails"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ivProfilePicture"
-        android:layout_marginStart="@dimen/item_horizontal_margin"
-        android:layout_marginTop="@dimen/profile_info_caption_separation"
-        android:layout_marginEnd="@dimen/item_horizontal_margin"
-        android:layout_marginBottom="@dimen/caption_image_separation"
-        android:textSize="@dimen/caption_text_size"
-        tools:text="A beautiful day in the park..." />
-
-    <ImageView
-        android:id="@+id/ivPostPicture"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/post_picture_size"
-        android:layout_below="@id/tvCaption"
-        tools:srcCompat="@tools:sample/backgrounds/scenic"
-        android:visibility="gone"/>
-
-    <LinearLayout
-        android:id="@+id/llReactions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ivPostPicture"
-        android:layout_marginTop="@dimen/image_reactions_separation"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/ivComment"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_centerHorizontal="true"
-                android:textSize="8sp"
-                app:srcCompat="@drawable/ic_outline_mode_comment_24" />
-
-            <TextView
-                android:id="@+id/tvCommentCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:textSize="12sp"
-                tools:text="125" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/cbLike"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:button="@drawable/selector_hearth"
-                android:checked="false"
-                android:textSize="8sp" />
-
-            <TextView
-                android:id="@+id/tvLikeCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:textSize="12sp"
-                tools:text="840" />
-
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-    <View
-        android:id="@+id/divider"
-        android:layout_marginVertical="@dimen/divider_vertical_margin"
-        android:layout_marginHorizontal="@dimen/divider_horizontal_margin"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_size"
-        android:background="?android:attr/listDivider"
-        android:layout_below="@id/llReactions"/>
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.example.dogbook.common;
 import android.app.Application;
 import android.util.Log;
 
+import com.example.dogbook.main.models.Comment;
 import com.example.dogbook.main.models.Like;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.main.models.User;
@@ -33,6 +34,7 @@ public class ParseApplication extends Application {
 
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(Like.class);
+        ParseObject.registerSubclass(Comment.class);
         ParseUser.registerSubclass(User.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
@@ -90,7 +92,13 @@ public class ParseApplication extends Application {
         query.whereEqualTo("author", author);
         query.whereEqualTo("post", post);
         return query;
+    }
 
+    public static ParseQuery<Comment> getCommentsFromPost(Post post) {
+        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+        query.whereEqualTo(Comment.KEY_POST, post);
+        query.include(Comment.KEY_AUTHOR);
+        return query;
     }
 
     public static ParseQuery<Post> getAllPostsQuery() {

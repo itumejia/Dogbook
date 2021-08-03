@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/comment_vertical_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/ivProfilePicture"
+        android:layout_width="@dimen/comment_profile_picture"
+        android:layout_height="@dimen/profile_picture_dimensions"
+        android:layout_marginStart="@dimen/item_horizontal_margin"
+        android:layout_marginTop="@dimen/item_top_margin"
+        app:srcCompat="@drawable/dog_icon" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/profile_picture_username_separation"
+        android:layout_marginTop="@dimen/comment_username_top_margin"
+        android:layout_toEndOf="@+id/ivProfilePicture"
+        android:textColor="@color/black"
+        android:textSize="@dimen/username_text_size"
+        android:textStyle="bold"
+        tools:text="Cookie" />
+
+    <TextView
+        android:id="@+id/tvCommentContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvUsername"
+        android:layout_toEndOf="@id/ivProfilePicture"
+        android:layout_marginHorizontal="@dimen/profile_picture_username_separation"
+        android:layout_marginTop="@dimen/username_comment_separation"
+        tools:text="hey there!" />
+
+</RelativeLayout>

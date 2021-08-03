@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,9 +20,9 @@ import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
-    public static List<Post> posts;
+    public List<Post> posts;
     private Context context;
-    public static OnItemClickListener clickListener;
+    public OnItemClickListener clickListener;
 
     public PostsAdapter(Context context, List<Post> posts) {
         this.posts = posts;
@@ -32,7 +33,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostViewHolder> {
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
-        return new PostViewHolder(view, context);
+        return new PostViewHolder(view, context, this);
     }
 
     @Override
