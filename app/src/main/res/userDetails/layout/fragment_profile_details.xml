@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.fragments.ProfileDetailsFragment">
+
+
+    <ImageView
+        android:id="@+id/ivProfilePicture"
+        android:layout_width="@dimen/profile_picture_dimensions"
+        android:layout_height="@dimen/profile_picture_dimensions"
+        android:layout_marginStart="@dimen/item_horizontal_margin"
+        android:layout_marginTop="@dimen/item_top_margin"
+        app:srcCompat="@drawable/dog_icon" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/profile_picture_username_separation"
+        android:layout_marginTop="@dimen/item_top_margin"
+        android:layout_toEndOf="@+id/ivProfilePicture"
+        android:textColor="@color/black"
+        android:textSize="@dimen/username_text_size"
+        android:textStyle="bold"
+        tools:text="Cookie" />
+
+    <LinearLayout
+        android:id="@+id/llOwner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/tvUsername"
+        android:layout_toEndOf="@id/ivProfilePicture"
+        android:layout_marginStart="@dimen/profile_picture_username_separation">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/from"/>
+
+        <TextView
+            android:id="@+id/tvOwner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Sofia" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llBreed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/llOwner"
+        android:layout_toEndOf="@id/ivProfilePicture"
+        android:layout_marginStart="@dimen/profile_picture_username_separation">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bio_breed"/>
+
+        <TextView
+            android:id="@+id/tvBreed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Husky" />
+    </LinearLayout>
+
+
+</RelativeLayout>
