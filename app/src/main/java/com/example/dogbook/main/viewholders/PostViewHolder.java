@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.dogbook.main.PostReactions;
+import com.example.dogbook.main.data.PostReactions;
 import com.example.dogbook.main.adapters.PostDetailsAdapter;
 import com.example.dogbook.main.adapters.PostsAdapter;
 import com.example.dogbook.main.models.Post;

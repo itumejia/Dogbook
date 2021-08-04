@@ -10,6 +10,34 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPostDetails"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_above="@id/llComposing"/>
+
+    <LinearLayout
+        android:id="@+id/llComposing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/light_main_color"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etComposeComment"
+            android:layout_width="@dimen/fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/edit_text_horizontal_margin"
+            android:layout_weight="1"
+            android:hint="@string/write_a_comment" />
+
+        <Button
+            android:id="@+id/btnComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/comment_btn_margin"
+            android:backgroundTint="@color/white"
+            android:text="@string/comment"
+            android:textColor="@color/dark_main_color" />
+
+    </LinearLayout>
 
 </RelativeLayout>

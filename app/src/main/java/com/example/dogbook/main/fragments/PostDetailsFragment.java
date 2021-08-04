@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.dogbook.R;
@@ -22,6 +24,8 @@ import com.example.dogbook.main.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
@@ -36,6 +40,8 @@ public class PostDetailsFragment extends Fragment {
     private RecyclerView rvPostDetails;
     private PostDetailsAdapter adapter;
     private List<Comment> comments;
+    private Button btnComment;
+    private EditText etComposeComment;
 
 
     public PostDetailsFragment() {}
@@ -71,6 +77,44 @@ public class PostDetailsFragment extends Fragment {
         rvPostDetails.setLayoutManager(layoutManager);
         refreshComments();
 
+        btnComment = view.findViewById(R.id.btnComment);
+        etComposeComment = view.findViewById(R.id.etComposeComment);
+        btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadComment();
+            }
+        });
+    }
+
+    private void uploadComment() {
+        String commentText = etComposeComment.getText().toString();
+        if (commentText.length() == 0) {
+            Toast.makeText(getContext(), "Your comment is empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Comment comment = new Comment();
+        comment.setAuthor(ParseUser.getCurrentUser());
+        comment.setPost(post);
+        comment.setContent(commentText);
+        comment.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    comments.add(comment);
+                    adapter.notifyItemInserted(comments.size());
+                    etComposeComment.setText("");
+                    //Disable and enable edit text to hide keyboard
+                    etComposeComment.setEnabled(false);
+                    etComposeComment.setEnabled(true);
+                    rvPostDetails.smoothScrollToPosition(comments.size());
+                    Log.i(TAG, "Comment uploaded");
+                    return;
+                }
+                Toast.makeText(getContext(), "Could not upload comment", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Issue uploading comment", e);
+            }
+        });
     }
 
     private void refreshComments() {
