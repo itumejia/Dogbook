@@ -99,7 +99,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
         //Liking action
         if (v == cbLike && cbLike.isChecked()){
-            PostReactions.like(post, context, new PostReactions.PostReactionCallback() {
+            PostReactions.like(post, context, new PostReactions.PostLikeCallback() {
                 @Override
                 public void onOptimisticUpdate(Post post) {
                     tvLikeCount.setText(String.valueOf(post.getLikesCount()));
@@ -120,7 +120,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
         //Disliking action
         if (v ==cbLike && !cbLike.isChecked()){
-            PostReactions.dislike(post, context, new PostReactions.PostReactionCallback() {
+            PostReactions.dislike(post, context, new PostReactions.PostLikeCallback() {
                 @Override
                 public void onOptimisticUpdate(Post post) {
                     tvLikeCount.setText(String.valueOf(post.getLikesCount()));
