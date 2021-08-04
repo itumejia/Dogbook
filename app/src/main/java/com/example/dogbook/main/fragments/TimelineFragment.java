@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +25,6 @@ import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,7 +38,7 @@ public class TimelineFragment extends Fragment {
     private FragmentManager fragmentManager;
     private RecyclerView rvPosts;
     private PostsAdapter postsAdapter;
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<>();
     private PullRefreshLayout ptrContainer;
 
     public TimelineFragment() {
@@ -57,6 +57,9 @@ public class TimelineFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
         setUpRecyclerView();
+        if (posts.size() == 0) {
+            refreshPosts();
+        }
     }
 
     private void initView(View view) {
@@ -65,8 +68,6 @@ public class TimelineFragment extends Fragment {
         ptrContainer.setColor(R.color.main_color);
         ptrContainer.setRefreshStyle(PullRefreshLayout.STYLE_SMARTISAN);
         rvPosts = view.findViewById(R.id.rvPosts);
-        posts = new ArrayList<>();
-        postsAdapter = new PostsAdapter(getContext(), posts);
         ptrContainer.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -76,6 +77,7 @@ public class TimelineFragment extends Fragment {
     }
 
     private void setUpRecyclerView() {
+        postsAdapter = new PostsAdapter(getContext(), posts);
         postsAdapter.setOnItemClickListener(new PostsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
@@ -89,7 +91,6 @@ public class TimelineFragment extends Fragment {
         rvPosts.setAdapter(postsAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(layoutManager);
-        refreshPosts();
     }
 
 
