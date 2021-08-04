@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.dogbook.R;
 import com.example.dogbook.common.ParseApplication;
 import com.example.dogbook.main.adapters.PostDetailsAdapter;
+import com.example.dogbook.main.data.PostReactions;
 import com.example.dogbook.main.models.Comment;
 import com.example.dogbook.main.models.Post;
 import com.parse.FindCallback;
@@ -93,26 +94,27 @@ public class PostDetailsFragment extends Fragment {
             Toast.makeText(getContext(), "Your comment is empty!", Toast.LENGTH_SHORT).show();
             return;
         }
-        Comment comment = new Comment();
-        comment.setAuthor(ParseUser.getCurrentUser());
-        comment.setPost(post);
-        comment.setContent(commentText);
-        comment.saveInBackground(new SaveCallback() {
+        PostReactions.comment(post, commentText, getContext(), new PostReactions.PostCommentCallback() {
             @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    comments.add(comment);
-                    adapter.notifyItemInserted(comments.size());
-                    etComposeComment.setText("");
-                    //Disable and enable edit text to hide keyboard
-                    etComposeComment.setEnabled(false);
-                    etComposeComment.setEnabled(true);
-                    rvPostDetails.smoothScrollToPosition(comments.size());
-                    Log.i(TAG, "Comment uploaded");
-                    return;
-                }
-                Toast.makeText(getContext(), "Could not upload comment", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "Issue uploading comment", e);
+            public void onOptimisticUpdate(Post post) {}
+
+            @Override
+            public void onSuccess(Post post, Comment comment) {
+                comments.add(comment);
+                PostDetailsFragment.this.post.setCommentsCount(post.getCommentsCount());
+                adapter.notifyItemChanged(0);
+                adapter.notifyItemInserted(comments.size());
+                etComposeComment.setText("");
+                //Disable and enable edit text to hide keyboard
+                etComposeComment.setEnabled(false);
+                etComposeComment.setEnabled(true);
+                rvPostDetails.smoothScrollToPosition(comments.size());
+                return;
+            }
+
+            @Override
+            public void onFailure(Post post, Comment comment) {
+
             }
         });
     }

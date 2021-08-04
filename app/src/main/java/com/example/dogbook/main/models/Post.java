@@ -125,6 +125,10 @@ public class Post extends ParseObject implements ClusterItem {
         }
     }
 
+    public void commentAddedLocally() {
+        commentsCount += 1;
+    }
+
     public String getRelativeTime() {
 
         int SECOND_MILLIS = 1000;
