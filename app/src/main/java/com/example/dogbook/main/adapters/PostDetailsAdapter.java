@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dogbook.R;
@@ -24,11 +25,13 @@ public class PostDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int TYPE_COMMENT = 2;
 
     private Context context;
+    private FragmentManager fragmentManager;
     public Post post;
     private List<Comment> comments;
 
-    public PostDetailsAdapter(Context context, Post post, List<Comment> comments) {
+    public PostDetailsAdapter(Context context, FragmentManager fragmentManager, Post post, List<Comment> comments) {
         this.context = context;
+        this.fragmentManager = fragmentManager;
         this.post = post;
         this.comments = comments;
     }
@@ -38,7 +41,7 @@ public class PostDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == TYPE_POST) {
             View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
-            return new PostViewHolder(view, context, this);
+            return new PostViewHolder(view, context, this, fragmentManager);
         }
         View view = LayoutInflater.from(context).inflate(R.layout.item_comment, parent, false);
         return new CommentViewHolder(view, context);
