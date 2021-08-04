@@ -7,7 +7,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.dogbook.main.fragmentContainers.MapContainerFragment;
 import com.example.dogbook.main.fragmentContainers.TimelineContainerFragment;
+import com.example.dogbook.main.fragments.ProfileDetailsFragment;
 import com.example.dogbook.main.fragments.TimelineFragment;
+import com.example.dogbook.main.models.User;
+import com.parse.ParseUser;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
@@ -27,6 +30,9 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
                 return new TimelineContainerFragment();
             case 1:
                 return new MapContainerFragment();
+
+            case 2:
+                return ProfileDetailsFragment.newInstance((User) ParseUser.getCurrentUser());
         }
     }
 
