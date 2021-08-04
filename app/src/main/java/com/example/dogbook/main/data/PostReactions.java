@@ -1,4 +1,4 @@
-package com.example.dogbook.main;
+package com.example.dogbook.main.data;
 
 import android.content.Context;
 import android.util.Log;

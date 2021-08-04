@@ -4,4 +4,7 @@
     <dimen name="comment_username_top_margin">15dp</dimen>
     <dimen name="username_comment_separation">5dp</dimen>
     <dimen name="comment_vertical_margin">5dp</dimen>
+    <dimen name="fill_parent">0dp</dimen>
+    <dimen name="edit_text_horizontal_margin">5dp</dimen>
+    <dimen name="comment_btn_margin">5dp</dimen>
 </resources>
