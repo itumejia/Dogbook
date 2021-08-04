@@ -17,6 +17,7 @@ import com.example.dogbook.main.fragments.TimelineFragment;
 public class TimelineContainerFragment extends Fragment {
 
     private FragmentManager fragmentManager;
+    public static final String TIMELINE_FRAGMENT_TAG = "TimelineFragmentTag";
 
     public TimelineContainerFragment() {
         // Required empty public constructor
@@ -34,6 +35,6 @@ public class TimelineContainerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Fragment fragment = new TimelineFragment();
         fragmentManager = getChildFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.timelineFragmentContainer, fragment).commit();
+        fragmentManager.beginTransaction().add(R.id.timelineFragmentContainer, fragment, TIMELINE_FRAGMENT_TAG).commit();
     }
 }

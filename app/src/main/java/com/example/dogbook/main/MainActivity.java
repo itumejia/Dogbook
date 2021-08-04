@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import com.example.dogbook.compose.ComposeActivity;
 import com.example.dogbook.login.LoginActivity;
 import com.example.dogbook.main.adapters.ViewPagerAdapter;
+import com.example.dogbook.main.fragmentContainers.TimelineContainerFragment;
 import com.example.dogbook.main.fragments.TimelineFragment;
 import com.example.dogbook.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -131,7 +132,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateTimeline() {
-        TimelineFragment timelineFragment = (TimelineFragment) fragmentManager.findFragmentByTag("f" + ViewPagerAdapter.TIMELINE_PAGE);
+        //Get timeline container fragment from support fragment manager, and from this get the timeline fragment with the child fragment manager
+        TimelineFragment timelineFragment = (TimelineFragment) fragmentManager.findFragmentByTag("f" + ViewPagerAdapter.TIMELINE_PAGE).getChildFragmentManager().findFragmentByTag(TimelineContainerFragment.TIMELINE_FRAGMENT_TAG);
         timelineFragment.refreshPosts();
         pagerAdapter.notifyItemChanged(ViewPagerAdapter.TIMELINE_PAGE);
     }
