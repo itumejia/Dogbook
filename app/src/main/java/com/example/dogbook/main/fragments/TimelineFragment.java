@@ -77,17 +77,7 @@ public class TimelineFragment extends Fragment {
     }
 
     private void setUpRecyclerView() {
-        postsAdapter = new PostsAdapter(getContext(), posts);
-        postsAdapter.setOnItemClickListener(new PostsAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View v) {
-                PostDetailsFragment fragment = new PostDetailsFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.timelineFragmentContainer, PostDetailsFragment.newInstance(posts.get(position)))
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
+        postsAdapter = new PostsAdapter(getContext(), fragmentManager, posts);
         rvPosts.setAdapter(postsAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(layoutManager);

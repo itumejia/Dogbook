@@ -22,18 +22,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     public List<Post> posts;
     private Context context;
-    public OnItemClickListener clickListener;
+    private FragmentManager fragmentManager;
 
-    public PostsAdapter(Context context, List<Post> posts) {
+    public PostsAdapter(Context context, FragmentManager fragmentManager, List<Post> posts) {
         this.posts = posts;
         this.context = context;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
-        return new PostViewHolder(view, context, this);
+        return new PostViewHolder(view, context, this, fragmentManager);
     }
 
     @Override
@@ -50,13 +51,5 @@ public class PostsAdapter extends RecyclerView.Adapter<PostViewHolder> {
     public void onViewRecycled(@NonNull PostViewHolder holder) {
         super.onViewRecycled(holder);
         holder.recycle();
-    }
-
-    public void setOnItemClickListener(OnItemClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(int position, View v);
     }
 }

@@ -7,12 +7,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.dogbook.main.data.PostReactions;
 import com.example.dogbook.main.adapters.PostDetailsAdapter;
 import com.example.dogbook.main.adapters.PostsAdapter;
+import com.example.dogbook.main.fragments.PostDetailsFragment;
+import com.example.dogbook.main.fragments.ProfileDetailsFragment;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
 import com.example.dogbook.main.models.User;
@@ -21,6 +24,7 @@ import com.parse.ParseFile;
 public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private Context context;
+    private FragmentManager fragmentManager;
     private RecyclerView.Adapter adapter;
 
     private ImageView ivProfilePicture;
@@ -33,7 +37,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     private TextView tvLikeCount;
     private TextView tvCommentCount;
 
-    public PostViewHolder(@NonNull View itemView, Context context, RecyclerView.Adapter adapter) {
+    public PostViewHolder(@NonNull View itemView, Context context, RecyclerView.Adapter adapter, FragmentManager fragmentManager) {
         super(itemView);
         ivProfilePicture = itemView.findViewById(R.id.ivProfilePicture);
         ivPostPicture = itemView.findViewById(R.id.ivPostPicture);
@@ -45,10 +49,15 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         tvLikeCount = itemView.findViewById(R.id.tvLikeCount);
         tvCommentCount = itemView.findViewById(R.id.tvCommentCount);
         this.context = context;
+        this.fragmentManager = fragmentManager;
         this.adapter = adapter;
 
         itemView.setOnClickListener(this);
         cbLike.setOnClickListener(this);
+        tvUsername.setOnClickListener(this);
+        tvOwner.setOnClickListener(this);
+        ivProfilePicture.setOnClickListener(this);
+
     }
 
     public void bind(Post post) {
@@ -138,10 +147,21 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
             return;
         }
 
+        //Go to User Details Fragment
+        if (v == tvUsername || v == tvOwner || v == ivProfilePicture) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.timelineFragmentContainer, ProfileDetailsFragment.newInstance((User) post.getAuthor()))
+                    .addToBackStack(null)
+                    .commit();
+            return;
+        }
 
         //Add click listener to the entire item only if it is in the Posts Adapter
-        if (adapter instanceof PostsAdapter && ((PostsAdapter) adapter).clickListener != null) {
-            ((PostsAdapter) adapter).clickListener.onItemClick(getAdapterPosition(),v);
+        if (adapter instanceof PostsAdapter) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.timelineFragmentContainer, PostDetailsFragment.newInstance(post))
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 }

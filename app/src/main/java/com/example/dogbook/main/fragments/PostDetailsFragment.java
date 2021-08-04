@@ -72,7 +72,7 @@ public class PostDetailsFragment extends Fragment {
     private void initView(View view) {
         rvPostDetails = view.findViewById(R.id.rvPostDetails);
         comments = new ArrayList<>();
-        adapter = new PostDetailsAdapter(getContext(), post, comments);
+        adapter = new PostDetailsAdapter(getContext(), getParentFragmentManager(), post, comments);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvPostDetails.setAdapter(adapter);
         rvPostDetails.setLayoutManager(layoutManager);
