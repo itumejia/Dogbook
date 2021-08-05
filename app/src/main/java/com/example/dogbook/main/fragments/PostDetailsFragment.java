@@ -19,14 +19,11 @@ import android.widget.Toast;
 import com.example.dogbook.R;
 import com.example.dogbook.common.ParseApplication;
 import com.example.dogbook.main.adapters.PostDetailsAdapter;
-import com.example.dogbook.main.data.PostReactions;
+import com.example.dogbook.main.data.Reactions;
 import com.example.dogbook.main.models.Comment;
 import com.example.dogbook.main.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
@@ -94,7 +91,7 @@ public class PostDetailsFragment extends Fragment {
             Toast.makeText(getContext(), "Your comment is empty!", Toast.LENGTH_SHORT).show();
             return;
         }
-        PostReactions.comment(post, commentText, getContext(), new PostReactions.PostCommentCallback() {
+        Reactions.comment(post, commentText, getContext(), new Reactions.PostCommentCallback() {
             @Override
             public void onOptimisticUpdate(Post post) {}
 

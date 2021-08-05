@@ -18,6 +18,7 @@ import android.widget.ToggleButton;
 import com.bumptech.glide.Glide;
 import com.example.dogbook.R;
 import com.example.dogbook.common.ParseApplication;
+import com.example.dogbook.main.data.Reactions;
 import com.example.dogbook.main.models.Follow;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.main.models.User;
@@ -76,6 +77,7 @@ public class ProfileDetailsFragment extends Fragment {
         tvBreed = view.findViewById(R.id.tvBreed);
         btnFollow = view.findViewById(R.id.btnFollow);
 
+        //Populate the user data
         user.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
@@ -95,6 +97,7 @@ public class ProfileDetailsFragment extends Fragment {
             }
         });
 
+        //Populate follow button
         if (!user.hasSameId(ParseUser.getCurrentUser())) {
             ParseQuery<Follow> query = ParseApplication.getFollowFromUserToUser(ParseUser.getCurrentUser(), user);
             query.countInBackground(new CountCallback() {
@@ -110,6 +113,42 @@ public class ProfileDetailsFragment extends Fragment {
                 }
             });
         }
+
+        btnFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //The user will follow
+                if(btnFollow.isChecked()) {
+                    Reactions.follow(user, getContext(), new Reactions.UserFollowCallback() {
+                        @Override
+                        public void onOptimisticUpdate() {}
+
+                        @Override
+                        public void onSuccess() {}
+
+                        @Override
+                        public void onFailure() {
+                            btnFollow.setChecked(false);
+                        }
+                    });
+                    return;
+                }
+
+                //The user will unfollow
+                Reactions.unfollow(user, getContext(), new Reactions.UserFollowCallback() {
+                    @Override
+                    public void onOptimisticUpdate() {}
+
+                    @Override
+                    public void onSuccess() {}
+
+                    @Override
+                    public void onFailure() {
+                        btnFollow.setChecked(true);
+                    }
+                });
+            }
+        });
 
     }
 }
