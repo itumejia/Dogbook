@@ -13,15 +13,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.example.dogbook.R;
+import com.example.dogbook.common.ParseApplication;
+import com.example.dogbook.main.models.Follow;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.main.models.User;
+import com.parse.CountCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
@@ -35,6 +40,7 @@ public class ProfileDetailsFragment extends Fragment {
     private TextView tvUsername;
     private TextView tvOwner;
     private TextView tvBreed;
+    private ToggleButton btnFollow;
 
     public ProfileDetailsFragment() {
         // Required empty public constructor
@@ -68,6 +74,7 @@ public class ProfileDetailsFragment extends Fragment {
         tvUsername = view.findViewById(R.id.tvUsername);
         tvOwner = view.findViewById(R.id.tvOwner);
         tvBreed = view.findViewById(R.id.tvBreed);
+        btnFollow = view.findViewById(R.id.btnFollow);
 
         user.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
             @Override
@@ -87,5 +94,22 @@ public class ProfileDetailsFragment extends Fragment {
                 Log.e(TAG, "Issue fetching user data", e);
             }
         });
+
+        if (!user.hasSameId(ParseUser.getCurrentUser())) {
+            ParseQuery<Follow> query = ParseApplication.getFollowFromUserToUser(ParseUser.getCurrentUser(), user);
+            query.countInBackground(new CountCallback() {
+                @Override
+                public void done(int count, ParseException e) {
+                    if (e == null) {
+                        btnFollow.setChecked(count > 0); //Set btn to ON if the logged user follows the selected user
+                        btnFollow.setVisibility(View.VISIBLE);
+                        return;
+                    }
+                    Toast.makeText(getContext(), "Could not load user information", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Issue fetching 'follow' information", e);
+                }
+            });
+        }
+
     }
 }

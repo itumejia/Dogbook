@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.example.dogbook.main.models.Comment;
+import com.example.dogbook.main.models.Follow;
 import com.example.dogbook.main.models.Like;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.main.models.User;
@@ -35,6 +36,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(Like.class);
         ParseObject.registerSubclass(Comment.class);
+        ParseObject.registerSubclass(Follow.class);
         ParseUser.registerSubclass(User.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
@@ -98,6 +100,13 @@ public class ParseApplication extends Application {
         ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
         query.whereEqualTo(Comment.KEY_POST, post);
         query.include(Comment.KEY_AUTHOR);
+        return query;
+    }
+
+    public static ParseQuery<Follow> getFollowFromUserToUser(ParseUser followingUser, ParseUser followedUser) {
+        ParseQuery<Follow> query = ParseQuery.getQuery(Follow.class);
+        query.whereEqualTo(Follow.KEY_FOLLOWING_USER, followingUser);
+        query.whereEqualTo(Follow.KEY_FOLLOWED_USER, followedUser);
         return query;
     }
 

@@ -70,5 +70,19 @@
             tools:text="Husky" />
     </LinearLayout>
 
+    <ToggleButton
+        android:id="@+id/btnFollow"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/item_top_margin"
+        android:layout_marginHorizontal="@dimen/item_horizontal_margin"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textOn="Unfollow"
+        android:textOff="Follow"
+        android:textColor="@color/dark_main_color"
+        android:background="@drawable/selector_follow"
+        android:visibility="gone"
+        />
+
 
 </RelativeLayout>
