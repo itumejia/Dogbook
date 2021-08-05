@@ -91,6 +91,7 @@ public class TimelineFragment extends Fragment {
             @Override
             public void done(Object object, ParseException e) {
                 if (e == null) {
+                    //Needs to update the way results are received from function
                     HashMap results = (HashMap) object;
                     posts.clear();
                     posts.addAll((Collection<? extends Post>) results.get("posts"));
