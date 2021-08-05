@@ -23,6 +23,7 @@ import com.parse.SaveCallback;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,22 +39,34 @@ public class Post extends ParseObject implements ClusterItem {
     public static final String KEY_LOCATION = "location";
     public static final String KEY_AUTHOR = "author";
 
+    public static final String KEY_RESULTS_POST = "post";
+    public static final String KEY_RESULTS_REACTIONS = "reactions";
+
     public static final String KEY_REACTIONS_IS_LIKED = "isLiked";
     public static final String KEY_REACTIONS_LIKES_COUNT = "likesCount";
     public static final String KEY_REACTIONS_COMMENTS_COUNT = "commentsCount";
+    public static final String KEY_REACTIONS_LIKED_BY = "likedBy";
 
     private boolean isLikedByLoggedInUser = false; //Default value: the post has not been liked by the user
     private int likesCount;
     private int commentsCount;
+    private List<Like> likedBy = new ArrayList<>();
 
     public Post() {}
 
     //Add reactions information to the posts
-    public static List<Post> addReactions(List<Post> posts, List<HashMap> reactions) {
-        for (int i = 0; i < posts.size(); i++) {
-            posts.get(i).setLikedByLoggedInUser((Boolean) reactions.get(i).get(KEY_REACTIONS_IS_LIKED));
-            posts.get(i).setLikesCount((int) reactions.get(i).get(KEY_REACTIONS_LIKES_COUNT));
-            posts.get(i).setCommentsCount((int) reactions.get(i).get(KEY_REACTIONS_COMMENTS_COUNT));
+    public static List<Post> addPostsFromCodeCloudFunctionResults(List<HashMap> results) {
+        List<Post> posts = new ArrayList<Post>();
+        for (int i = 0; i < results.size(); i++) {
+            //Create new Post object and add all the info to it
+            Post post = (Post) results.get(i).get(KEY_RESULTS_POST);
+            HashMap reactions = (HashMap) results.get(i).get(KEY_RESULTS_REACTIONS);
+            post.setLikedByLoggedInUser((Boolean) reactions.get(KEY_REACTIONS_IS_LIKED));
+            post.setLikesCount((int) reactions.get(KEY_REACTIONS_LIKES_COUNT));
+            post.setCommentsCount((int) reactions.get(KEY_REACTIONS_COMMENTS_COUNT));
+            post.setLikedBy((ArrayList<Like>) reactions.get(KEY_REACTIONS_LIKED_BY));
+
+            posts.add(post);
         }
 
         return posts;
@@ -111,6 +124,14 @@ public class Post extends ParseObject implements ClusterItem {
         this.commentsCount = commentsCount;
     }
 
+    public List<Like> getLikedBy() {
+        return likedBy;
+    }
+
+    public void setLikedBy(List<Like> likedBy) {
+        this.likedBy = likedBy;
+    }
+
     public void likedLocally() {
         if (!isLikedByLoggedInUser) {
             isLikedByLoggedInUser = true;
@@ -156,6 +177,32 @@ public class Post extends ParseObject implements ClusterItem {
         } else {
             return diff / DAY_MILLIS + " d";
         }
+    }
+
+    public String getLikedByLegend() {
+        if (likedBy.size() == 0) {
+            return "";
+        }
+        String likedByLegend = "Liked by ";
+        likedByLegend += likedBy.get(0).getAuthor().getUsername(); //First username
+
+        //Return single name if there is only one element
+        if (likedBy.size() == 1) {
+            return likedByLegend;
+        }
+
+        int position = 1; //Starts at 1 because the first name is already considered
+
+        //The cycle won't reach the last element
+        while (position < likedBy.size() - 1) {
+            likedByLegend = likedByLegend + (", " + likedBy.get(position).getAuthor().getUsername());
+            position += 1;
+        }
+
+        //Last name will be added with an "and"
+        likedByLegend = likedByLegend + (" and " + likedBy.get(position).getAuthor().getUsername());
+
+        return likedByLegend;
     }
 
     @NonNull

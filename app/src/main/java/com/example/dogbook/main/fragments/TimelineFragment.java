@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,20 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
-import com.example.dogbook.common.ParseApplication;
 import com.example.dogbook.main.adapters.PostsAdapter;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
-import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -91,11 +86,9 @@ public class TimelineFragment extends Fragment {
             @Override
             public void done(Object object, ParseException e) {
                 if (e == null) {
-                    //Needs to update the way results are received from function
-                    HashMap results = (HashMap) object;
+                    ArrayList results = (ArrayList) object;
                     posts.clear();
-                    posts.addAll((Collection<? extends Post>) results.get("posts"));
-                    posts = Post.addReactions(posts, (List<HashMap>) results.get("reactions"));
+                    posts.addAll(Post.addPostsFromCodeCloudFunctionResults(results));
                     postsAdapter.notifyDataSetChanged();
                     rvPosts.smoothScrollToPosition(0);
                     ptrContainer.setRefreshing(false);

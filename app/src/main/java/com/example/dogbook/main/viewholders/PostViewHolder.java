@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,10 +17,13 @@ import com.example.dogbook.main.adapters.PostDetailsAdapter;
 import com.example.dogbook.main.adapters.PostsAdapter;
 import com.example.dogbook.main.fragments.PostDetailsFragment;
 import com.example.dogbook.main.fragments.ProfileDetailsFragment;
+import com.example.dogbook.main.models.Like;
 import com.example.dogbook.main.models.Post;
 import com.example.dogbook.R;
 import com.example.dogbook.main.models.User;
 import com.parse.ParseFile;
+
+import java.util.List;
 
 public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -33,6 +37,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     private TextView tvOwner;
     private TextView tvRelativeTime;
     private TextView tvCaption;
+    private LinearLayout llLikedByLegend;
+    private TextView tvLikedByLegend;
     private CheckBox cbLike;
     private TextView tvLikeCount;
     private TextView tvCommentCount;
@@ -45,6 +51,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         tvOwner = itemView.findViewById(R.id.tvOwner);
         tvRelativeTime = itemView.findViewById(R.id.tvRelativeTime);
         tvCaption = itemView.findViewById(R.id.tvCaption);
+        llLikedByLegend = itemView.findViewById(R.id.llLikedByLegend);
+        tvLikedByLegend = itemView.findViewById(R.id.tvLikedByLegend);
         cbLike = itemView.findViewById(R.id.cbLike);
         tvLikeCount = itemView.findViewById(R.id.tvLikeCount);
         tvCommentCount = itemView.findViewById(R.id.tvCommentCount);
@@ -77,6 +85,11 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
             Glide.with(context).load(postPicture.getUrl()).into(ivPostPicture);
         }
 
+        if (post.getLikedBy().size() > 0) {
+            tvLikedByLegend.setText(post.getLikedByLegend());
+            llLikedByLegend.setVisibility(View.VISIBLE);
+        }
+
         tvLikeCount.setText(String.valueOf(post.getLikesCount()));
         tvCommentCount.setText(String.valueOf(post.getCommentsCount()));
         cbLike.setChecked(post.isLikedByLoggedInUser());
@@ -89,6 +102,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         tvCaption.setText("");
         ivPostPicture.setVisibility(View.GONE);
         ivPostPicture.setImageResource(0);
+        tvLikedByLegend.setText("");
+        llLikedByLegend.setVisibility(View.GONE);
         tvLikeCount.setText("");
         tvCommentCount.setText("");
         cbLike.setChecked(false);
