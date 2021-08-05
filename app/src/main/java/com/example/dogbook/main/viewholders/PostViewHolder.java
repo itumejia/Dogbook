@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.dogbook.main.data.PostReactions;
+import com.example.dogbook.main.data.Reactions;
 import com.example.dogbook.main.adapters.PostDetailsAdapter;
 import com.example.dogbook.main.adapters.PostsAdapter;
 import com.example.dogbook.main.fragments.PostDetailsFragment;
@@ -108,7 +108,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
         //Liking action
         if (v == cbLike && cbLike.isChecked()){
-            PostReactions.like(post, context, new PostReactions.PostLikeCallback() {
+            Reactions.like(post, context, new Reactions.PostLikeCallback() {
                 @Override
                 public void onOptimisticUpdate(Post post) {
                     tvLikeCount.setText(String.valueOf(post.getLikesCount()));
@@ -129,7 +129,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
         //Disliking action
         if (v ==cbLike && !cbLike.isChecked()){
-            PostReactions.dislike(post, context, new PostReactions.PostLikeCallback() {
+            Reactions.dislike(post, context, new Reactions.PostLikeCallback() {
                 @Override
                 public void onOptimisticUpdate(Post post) {
                     tvLikeCount.setText(String.valueOf(post.getLikesCount()));
