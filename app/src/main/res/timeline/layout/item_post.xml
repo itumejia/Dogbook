@@ -78,16 +78,16 @@
         android:visibility="gone">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/liked_by_hearth_size"
+            android:layout_height="@dimen/liked_by_hearth_size"
             app:srcCompat="@drawable/ic_vector_heart" />
 
         <TextView
             android:id="@+id/tvLikedByLegend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textSize="16sp"
+            android:layout_marginStart="@dimen/liked_by_icon_text_separation"
+            android:textSize="@dimen/liked_by_text_size"
             android:textStyle="bold"
             tools:text="Liked by Cookie, Aina and Sally" />
 

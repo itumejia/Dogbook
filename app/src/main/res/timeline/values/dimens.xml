@@ -15,4 +15,7 @@
     <dimen name="divider_horizontal_margin">10dp</dimen>
     <dimen name="divider_size">1dp</dimen>
     <dimen name="image_reactions_separation">10dp</dimen>
+    <dimen name="liked_by_hearth_size">20dp</dimen>
+    <dimen name="liked_by_icon_text_separation">10dp</dimen>
+    <dimen name="liked_by_text_size">16sp</dimen>
 </resources>
