@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -128,6 +129,7 @@ public class MapFragment extends Fragment {
             public void onClusterItemInfoWindowClick(Post item) {
                 PostDetailsFragment fragment = new PostDetailsFragment();
                 fragmentManager.beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .replace(R.id.mapFragmentContainer, fragment.newInstance(item))
                         .addToBackStack(null)
                         .commit();

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.dogbook.R;
 import com.example.dogbook.common.ParseApplication;
 import com.example.dogbook.main.data.Reactions;
@@ -35,6 +36,7 @@ import org.parceler.Parcels;
 public class ProfileDetailsFragment extends Fragment {
 
     private static final String TAG = "ProfileDetailsFragment";
+    public static final int ROUNDED_CORNERS_RADIUS = 50;
 
     private User user;
     private ImageView ivProfilePicture;
@@ -84,7 +86,11 @@ public class ProfileDetailsFragment extends Fragment {
                 if (e == null) {
                     ParseFile profilePicture = user.getProfilePicture();
                     if (profilePicture != null) {
-                        Glide.with(getContext()).load(profilePicture.getUrl()).into(ivProfilePicture);
+                        Glide.with(getContext())
+                                .load(profilePicture.getUrl())
+                                .centerCrop()
+                                .transform(new RoundedCorners(ROUNDED_CORNERS_RADIUS))
+                                .into(ivProfilePicture);
                     }
 
                     tvUsername.setText(user.getUsername());
