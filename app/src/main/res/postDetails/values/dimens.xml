@@ -7,4 +7,6 @@
     <dimen name="fill_parent">0dp</dimen>
     <dimen name="edit_text_horizontal_margin">5dp</dimen>
     <dimen name="comment_btn_margin">5dp</dimen>
+    <dimen name="profile_picture_rounded_radius">30</dimen>
+    <dimen name="profile_picture_rounded_margin">10</dimen>
 </resources>

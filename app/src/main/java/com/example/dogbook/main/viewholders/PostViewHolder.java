@@ -9,9 +9,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.dogbook.main.data.Reactions;
 import com.example.dogbook.main.adapters.PostDetailsAdapter;
 import com.example.dogbook.main.adapters.PostsAdapter;
@@ -24,6 +26,8 @@ import com.example.dogbook.main.models.User;
 import com.parse.ParseFile;
 
 import java.util.List;
+
+import static com.example.dogbook.main.fragments.ProfileDetailsFragment.ROUNDED_CORNERS_RADIUS;
 
 public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -71,7 +75,11 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public void bind(Post post) {
         ParseFile profilePicture = post.getAuthor().getParseFile(User.KEY_PROFILE_PICTURE);
         if (profilePicture != null) {
-            Glide.with(context).load(profilePicture.getUrl()).into(ivProfilePicture);
+            Glide.with(context)
+                    .load(profilePicture.getUrl())
+                    .centerCrop()
+                    .transform(new RoundedCorners(ROUNDED_CORNERS_RADIUS))
+                    .into(ivProfilePicture);
         }
 
         tvUsername.setText(post.getAuthor().getUsername());
@@ -165,6 +173,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         //Go to User Details Fragment
         if (v == tvUsername || v == tvOwner || v == ivProfilePicture) {
             fragmentManager.beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .replace(R.id.timelineFragmentContainer, ProfileDetailsFragment.newInstance((User) post.getAuthor()))
                     .addToBackStack(null)
                     .commit();
@@ -174,6 +183,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         //Add click listener to the entire item only if it is in the Posts Adapter
         if (adapter instanceof PostsAdapter) {
             fragmentManager.beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .replace(R.id.timelineFragmentContainer, PostDetailsFragment.newInstance(post))
                     .addToBackStack(null)
                     .commit();

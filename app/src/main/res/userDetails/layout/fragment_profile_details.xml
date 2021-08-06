@@ -12,6 +12,7 @@
         android:id="@+id/ivProfilePicture"
         android:layout_width="@dimen/profile_picture_dimensions"
         android:layout_height="@dimen/profile_picture_dimensions"
+        android:scaleType="centerCrop"
         android:layout_marginStart="@dimen/item_horizontal_margin"
         android:layout_marginTop="@dimen/item_top_margin"
         app:srcCompat="@drawable/dog_icon" />
