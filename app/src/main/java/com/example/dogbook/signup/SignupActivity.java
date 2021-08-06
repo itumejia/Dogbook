@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.dogbook.login.LoginActivity;
 import com.example.dogbook.main.MainActivity;
 import com.example.dogbook.R;
+import com.example.dogbook.main.models.User;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -81,7 +82,7 @@ public class SignupActivity extends AppCompatActivity {
             btnSignup.stopAnimation(TransitionButton.StopAnimationStyle.SHAKE, null);
             return;
         }
-        ParseUser user = new ParseUser();
+        User user = new User();
         user.setUsername(etUsername.getText().toString());
         user.setPassword(etPassword.getText().toString());
         user.put("ownerName", etOwnerName.getText().toString());
